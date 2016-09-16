@@ -1,0 +1,257 @@
+{
+    "info": {
+        "version": "Build e07237252ae164e54e62cf2cf4733795ccbd57a5", 
+        "contact": {
+            "url": "http://www.vmware.com/company/contact_sales.html"
+        }, 
+        "description": "VMware Identity Manager REST API documentation.", 
+        "license": {
+            "url": "http://www.vmware.com/download/eula/identity-manager-terms-of-service.html", 
+            "name": "VMware Identity Manager Terms of Service"
+        }, 
+        "title": "VMware Identity Manager"
+    }, 
+    "paths": {
+        "/SAAS/jersey/manager/api/oauth2clients": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientSummaryList"
+                        }
+                    }
+                }, 
+                "produces": [
+                    "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
+                ], 
+                "description": "", 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "summary": "List existing OAuth 2.0 clients", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "getOAuth2ClientSummaryList"
+            }
+        }, 
+        "/SAAS/auth/oauthtoken": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "Successful", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2Token"
+                        }
+                    }, 
+                    "405": {
+                        "description": "The HTTP method might be incorrect, make sure you use the POST method."
+                    }, 
+                    "500": {
+                        "description": "The grant_type is incorrect or absent."
+                    }, 
+                    "401": {
+                        "description": "The client authentication failed. Check the 'Authorization' header."
+                    }, 
+                    "400": {
+                        "description": "The error can be any of those: the provided grant type is not supported, the request is missing a required parameter, the client authentication failed, the provided authorization grant is invalid, the authenticated client is not authorized to use this authorization grant type. See the OAUth2.0 spec for further details."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "Specifies the type of authorization grant in exchange of an access token and possibly a refresh token. VMware Identity Manager supported values are: authorization_code, password, client_credentials, refresh_token and urn:ietf:params:oauth:grant-type:jwt-bearer.", 
+                        "required": true, 
+                        "type": "string", 
+                        "name": "grant_type", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The client identifier. If the HTTP Basic authentication scheme is not used, client must specify the client identifier using this request parameter. The use of HTTP Basic is recommended.\n", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "client_id", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The client secret. This parameter is not required if there is no client secret.", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "client_secret", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The username, UTF-8 encoded. Required only if the grant_type is 'password'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "username", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The password, UTF-8 encoded. Required only if the grant_type is 'password'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "password", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The scope of the access request. Required only if the grant_type is 'password'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "scope", 
+                        "in": "query"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "login"
+                ], 
+                "description": "This token endpoint complies with the OAuth 2.0 specifications and must be used by client to obtain an access token with client authentication.", 
+                "summary": "Obtain an OAuth 2.0 access token and optionally a refresh token", 
+                "security": [
+                    {
+                        "basic_auth": []
+                    }
+                ], 
+                "operationId": "handleRequest"
+            }
+        }
+    }, 
+    "schemes": [
+        "https"
+    ], 
+    "tags": [
+        {
+            "name": "admin"
+        }, 
+        {
+            "name": "oauth2"
+        }
+    ], 
+    "basePath": "/", 
+    "securityDefinitions": {
+        "admin_oauth2": {
+            "scopes": {
+                "admin": "The admin role"
+            }, 
+            "tokenUrl": "/SAAS/auth/oauthtoken", 
+            "description": "The OAuth2.0 authentication scheme to access all admin APIs. VMware Identity Manager supports 'Authorization Code', 'Resource Owner Password Credentials' and 'Client Credentials' as defined by the OAuth 2.0 spec.", 
+            "flow": "accessCode", 
+            "type": "oauth2", 
+            "authorizationUrl": "/SAAS/auth/oauth2/authorize"
+        }, 
+        "basic_auth": {
+            "type": "basic", 
+            "description": "The HTTP Basic authentication scheme. The 'Authorization' header is formed using 'Basic ' + base64Encode(client_id + ':' + client_secret)"
+        }
+    }, 
+    "host": "localhost:8080", 
+    "definitions": {
+        "LinkParams": {
+            "type": "object"
+        }, 
+        "OAuth2ClientSummary": {
+            "type": "object", 
+            "properties": {
+                "scope": {
+                    "type": "string", 
+                    "example": "admin", 
+                    "description": "The scope of this OAuth 2.0 client"
+                }, 
+                "rememberAs": {
+                    "type": "string", 
+                    "example": "my oauth client", 
+                    "description": "The human friendly name of this OAuth 2.0 client"
+                }, 
+                "_links": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Link"
+                    }, 
+                    "readOnly": true, 
+                    "type": "object"
+                }, 
+                "mediaType": {
+                    "type": "string", 
+                    "example": "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json", 
+                    "description": "Defines the media type of this OAuth 2.0 client (Client Credentials type or Classic type)"
+                }, 
+                "clientId": {
+                    "type": "string", 
+                    "example": "oauth_clientid", 
+                    "description": "The client identifier of this OAuth 2.0 client"
+                }
+            }, 
+            "description": "An OAuth 2.0 client object"
+        }, 
+        "Link": {
+            "type": "object", 
+            "properties": {
+                "href": {
+                    "type": "string", 
+                    "format": "uri"
+                }, 
+                "params": {
+                    "$ref": "#/definitions/LinkParams"
+                }
+            }
+        }, 
+        "OAuth2Token": {
+            "type": "object", 
+            "properties": {
+                "access_token": {
+                    "type": "string", 
+                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9xxxxHVcA76zjsGN2w", 
+                    "description": "The requested access token. This token can now be used to call VMware Identity Manager APIs. For example, with the 'Bearer' token type, use 'Bearer &lt;this access token value&gt;' as the 'Authorization' header"
+                }, 
+                "token_type": {
+                    "type": "string", 
+                    "example": "Bearer", 
+                    "description": "The access token type. It provides the client with the information required to successfully utilize the access token to make a protected resource request. For example, the 'Bearer' token type is utilized by simply including the access token string in the request: Authorization: Bearer mF_9.B5f-4.1JqM"
+                }, 
+                "expires_in": {
+                    "description": "The time (in seconds) this token expires. If the return value is positive, the access token is going to expire in that many seconds. If the return value is 0, the access token already expired.If the return value is -1, token state could not be determined, since the access token doesn't contain expiration value.", 
+                    "type": "integer", 
+                    "example": 21599, 
+                    "format": "int64"
+                }, 
+                "refresh_token": {
+                    "type": "string", 
+                    "example": "21599", 
+                    "description": "The refresh token associated with the access token, if any. This refresh token can be used to request a refresh for the associated access token."
+                }, 
+                "scope": {
+                    "type": "string", 
+                    "example": "admin openid", 
+                    "description": "The scope of the access token issued. The value is expressed as a list of space-\n   delimited, case-sensitive strings."
+                }
+            }, 
+            "description": "The OAuth 2.0 token object"
+        }, 
+        "OAuth2ClientSummaryList": {
+            "type": "object", 
+            "properties": {
+                "items": {
+                    "items": {
+                        "$ref": "#/definitions/OAuth2ClientSummary"
+                    }, 
+                    "type": "array", 
+                    "description": "The list of items in the current page"
+                }, 
+                "_links": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Link"
+                    }, 
+                    "readOnly": true, 
+                    "type": "object"
+                }
+            }, 
+            "description": "The list of OAuth 2.0 clients"
+        }
+    }, 
+    "swagger": "2.0"
+}
