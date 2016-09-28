@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    This contains the authorization service configuration details that are used to demonstrate
+    authentication. Modify this file to provide your own configuration details.
+    -->
+    <eat-comment/>
+
+    <!-- Enables VMware Identity Manager configuration. -->
+    <bool name="vmware_enabled">true</bool>
+
+    <!-- Your VMware Identity Manager organization URL. -->
+    <string name="vmware_url" translatable="false">https://dev.hwslabs.com</string>
+
+    <!-- The information below must match the template information defined in the admin interface. -->
+    <!--<string name="vmware_template" translatable="false">VMware-AppAuth-Samples-Template</string>-->
+    <string name="vmware_template" translatable="false">VMware-AppAuth-Samples-Template-User-Grant</string>
+    <string name="vmware_auth_redirect_scheme" translatable="false">com.vmware.idm.samples.mobilesso</string>
+    <string name="vmware_auth_redirect_uri" translatable="false">com.vmware.idm.samples.mobilesso://oauth2redirect</string>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    This file contains the OAuth2 configuration details that do not typically need to be changed
+    for the demo app to correctly interact with VMware IDP.
+    -->
+    <eat-comment />
+
+    <!-- Defines the VMware Identity Manager name displayed on the UI. -->
+    <string name="vmware_name">VMware</string>
+
+    <!-- Authorize and token endpoints as defined in the OAUth2.0 specifications. -->
+    <string name="vmware_token_endpoint_uri" translatable="false">SAAS/auth/oauthtoken</string>
+    <string name="vmware_auth_endpoint_uri" translatable="false">SAAS/auth/oauth2/authorize</string>
+
+    <!-- Use the device register endpoint to dynamically register the device using VMware Identity Manager flow  (VMware specific). -->
+    <string name="vmware_registration_endpoint_uri" translatable="false">SAAS/auth/device/register</string>
+    <!-- The activation endpoint (VMware specific) to get the credentials. -->
+    <string name="vmware_activation_endpoint_uri" translatable="false">SAAS/API/1.0/REST/oauth2/activate</string>
+
+    <!-- Note: we need user scope to access the SCIM /Me endpoint -->
+    <string name="vmware_scope_string" translatable="false">openid profile email user</string>
+    <string name="vmware_userinfo_endpoint_uri" translatable="false">SAAS/jersey/manager/api/userinfo</string>
+    <string name="vmware_scim_userinfo_endpoint_uri" translatable="false">SAAS/jersey/manager/api/scim/Me</string>
+
+
+</resources>
