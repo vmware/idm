@@ -76,7 +76,7 @@ public class DeviceAuthorizationServiceTest extends VMwareAppAuthTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        DeviceRegistrationPendingIntentStore.getInstance().clearPendingIntents();
+        DeviceRegistrationPendingIntentStore.getInstance().clearAll();
         URLStreamHandler urlStreamHandler = new URLStreamHandler() {
             @Override
             protected URLConnection openConnection(URL url) throws IOException {

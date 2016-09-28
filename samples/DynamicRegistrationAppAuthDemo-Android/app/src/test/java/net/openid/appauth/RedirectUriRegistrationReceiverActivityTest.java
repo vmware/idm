@@ -56,7 +56,7 @@ public class RedirectUriRegistrationReceiverActivityTest extends VMwareAppAuthTe
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        DeviceRegistrationPendingIntentStore.getInstance().clearPendingIntents();
+        DeviceRegistrationPendingIntentStore.getInstance().clearAll();
         mRequest = getTestDeviceRegistrationRequestBuilder()
                 .setState(TEST_STATE)
                 .build();
@@ -64,7 +64,7 @@ public class RedirectUriRegistrationReceiverActivityTest extends VMwareAppAuthTe
 
     @After
     public void tearDown() {
-        DeviceRegistrationPendingIntentStore.getInstance().clearPendingIntents();
+        DeviceRegistrationPendingIntentStore.getInstance().clearAll();
     }
 
     @Test

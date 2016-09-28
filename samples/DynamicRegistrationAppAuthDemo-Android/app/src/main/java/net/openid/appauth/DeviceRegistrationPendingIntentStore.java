@@ -62,8 +62,10 @@ class DeviceRegistrationPendingIntentStore {
     }
 
     @VisibleForTesting
-    void clearPendingIntents() {
+    void clearAll() {
         mPendingIntents.clear();
+        mRequests.clear();
     }
 }
+
 
