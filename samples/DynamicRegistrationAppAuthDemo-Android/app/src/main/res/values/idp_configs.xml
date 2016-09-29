@@ -10,11 +10,10 @@
     <bool name="vmware_enabled">true</bool>
 
     <!-- Your VMware Identity Manager organization URL. -->
-    <string name="vmware_url" translatable="false">https://dev.hwslabs.com</string>
+    <string name="vmware_url" translatable="false">https://dev.vmwareidentity.asia</string>
 
     <!-- The information below must match the template information defined in the admin interface. -->
-    <!--<string name="vmware_template" translatable="false">VMware-AppAuth-Samples-Template</string>-->
-    <string name="vmware_template" translatable="false">VMware-AppAuth-Samples-Template-User-Grant</string>
+    <string name="vmware_template" translatable="false">VMware-AppAuth-Samples-Template</string>
     <string name="vmware_auth_redirect_scheme" translatable="false">com.vmware.idm.samples.mobilesso</string>
     <string name="vmware_auth_redirect_uri" translatable="false">com.vmware.idm.samples.mobilesso://oauth2redirect</string>
 
