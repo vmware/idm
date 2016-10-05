@@ -1,0 +1,17 @@
+
+vmware:
+  client:
+    clientId: webapp.samples.vmware.com
+    clientSecret: Gp4mGG5klyCm8k3UZwJR4o2fCL4OqwBIplRl4yvAE90MVyRg
+    accessTokenUri: https://dev.vmwareidentity.asia/SAAS/auth/oauthtoken
+    userAuthorizationUri: https://dev.vmwareidentity.asia/SAAS/auth/oauth2/authorize
+    authenticationScheme: header
+    clientAuthenticationScheme: header
+    scope: openid
+  resource:
+    userInfoUri: https://dev.vmwareidentity.asia/SAAS/jersey/manager/api/userinfo
+
+
+logging:
+  level:
+    org.springframework.security: DEBUG
