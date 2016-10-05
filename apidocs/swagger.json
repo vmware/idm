@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build e07237252ae164e54e62cf2cf4733795ccbd57a5", 
+        "version": "Build 99f7b3019e80de5c11b8da8a1070b42c9d08a74a", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -27,8 +27,8 @@
                 ], 
                 "description": "", 
                 "tags": [
-                    "admin", 
-                    "oauth2"
+                    "oauth2", 
+                    "admin"
                 ], 
                 "summary": "List existing OAuth 2.0 clients", 
                 "security": [
@@ -39,6 +39,72 @@
                     }
                 ], 
                 "operationId": "getOAuth2ClientSummaryList"
+            }
+        }, 
+        "/SAAS/auth/oauth2/authorize": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }, 
+                    "400": {
+                        "description": "The error can be any of those: no client_id has been specified, the client_id does not exist, the redirect_uri has not been specified or does not match. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in the pre-created OAuth2.0 client in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
+                        "required": true, 
+                        "type": "string", 
+                        "name": "redirect_uri", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.", 
+                        "required": true, 
+                        "type": "string", 
+                        "name": "client_id", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.", 
+                        "required": true, 
+                        "type": "string", 
+                        "name": "response_type", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "A string that is returned to the application with the response. It is useful for any state information the application may want to associate with the request. For example, it could contain the original endpoint that the user is trying to access and/or where the user should land on after a successful login.", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "state", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "domain", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "Specifies the user's login. In caseyour application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "u", 
+                        "in": "query"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "login"
+                ], 
+                "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. Your application must have an OAuth 2.0 client already registered in VMware Identity Manager with the 'authorization_code' grant type.", 
+                "summary": "OAuth 2.0 authorization endpoint", 
+                "operationId": "doOAuth2Authorize"
             }
         }, 
         "/SAAS/auth/oauthtoken": {
@@ -60,7 +126,7 @@
                         "description": "The client authentication failed. Check the 'Authorization' header."
                     }, 
                     "400": {
-                        "description": "The error can be any of those: the provided grant type is not supported, the request is missing a required parameter, the client authentication failed, the provided authorization grant is invalid, the authenticated client is not authorized to use this authorization grant type. See the OAUth2.0 spec for further details."
+                        "description": "The error can be any of those: the provided grant type is not supported, the request is missing a required parameter, the client authentication failed, the provided authorization grant is invalid, the authenticated client is not authorized to use this authorization grant type. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
                     }
                 }, 
                 "parameters": [
@@ -205,8 +271,8 @@
             "properties": {
                 "access_token": {
                     "type": "string", 
-                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9xxxxHVcA76zjsGN2w", 
-                    "description": "The requested access token. This token can now be used to call VMware Identity Manager APIs. For example, with the 'Bearer' token type, use 'Bearer &lt;this access token value&gt;' as the 'Authorization' header"
+                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9xxxxHVcA76zjsGN2w...", 
+                    "description": "The requested access token. This token can now be used to call VMware Identity Manager APIs. For example, with the 'Bearer' token type, use 'Bearer &lt;this access token value&gt;' as the 'Authorization' header. The access token is a <a href=\"https://jwt.io/\">JSON web token</a> (JWT)."
                 }, 
                 "token_type": {
                     "type": "string", 
