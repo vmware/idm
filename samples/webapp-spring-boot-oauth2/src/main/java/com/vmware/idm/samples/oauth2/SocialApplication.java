@@ -60,7 +60,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
-    @RequestMapping({"/user", "/me"})
+    @RequestMapping("/user")
     public Map<String, String> user(Principal principal) {
         Map<String, String> map = new LinkedHashMap<>();
         map.put("name", principal.getName());
@@ -77,17 +77,6 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
         // @formatter:on
-    }
-
-    @Configuration
-    @EnableResourceServer
-    protected static class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
-        @Override
-        public void configure(HttpSecurity http) throws Exception {
-            // @formatter:off
-            http.antMatcher("/me").authorizeRequests().anyRequest().authenticated();
-            // @formatter:on
-        }
     }
 
     public static void main(String[] args) {

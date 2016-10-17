@@ -43,11 +43,4 @@ public class SocialApplicationTests {
     @Test
     public void contextLoads() {
     }
-
-    @Test
-    public void testMeUnauthenticated() throws Exception {
-        Map<String, Object> apiResponse = this.restTemplate.getForObject("/me", Map.class);
-        assertThat(apiResponse).containsKeys("error", "error_description");
-        assertThat(apiResponse.get("error")).isEqualTo("unauthorized");
-    }
 }
