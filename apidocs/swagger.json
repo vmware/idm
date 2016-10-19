@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build 99f7b3019e80de5c11b8da8a1070b42c9d08a74a", 
+        "version": "Build 1393fed9ffbbcc0beffe93fa48c607b2243c448f", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -12,6 +12,39 @@
         "title": "VMware Identity Manager"
     }, 
     "paths": {
+        "/SAAS/API/1.0/REST/oauth2/activate": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientActivationDetails"
+                        }
+                    }, 
+                    "500": {
+                        "description": "The activation code is invalid or not specified."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string"
+                        }, 
+                        "description": "the activation code", 
+                        "required": true, 
+                        "name": "body", 
+                        "in": "body"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "mobile"
+                ], 
+                "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.", 
+                "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.", 
+                "operationId": "post-activateOauth2Client"
+            }
+        }, 
         "/SAAS/jersey/manager/api/oauth2clients": {
             "get": {
                 "responses": {
@@ -25,7 +58,7 @@
                 "produces": [
                     "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
                 ], 
-                "description": "", 
+                "description": "This endpoint is used to read the list of OAuth 2.0 clients VMware Identity Manager has registered.", 
                 "tags": [
                     "oauth2", 
                     "admin"
@@ -38,7 +71,7 @@
                         ]
                     }
                 ], 
-                "operationId": "getOAuth2ClientSummaryList"
+                "operationId": "get-getOAuth2ClientSummaryList"
             }
         }, 
         "/SAAS/auth/oauth2/authorize": {
@@ -56,32 +89,44 @@
                 }, 
                 "parameters": [
                     {
-                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in the pre-created OAuth2.0 client in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
+                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in your OAuth2.0 client registration in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
                         "required": true, 
+                        "x-example": "https://example-app.com/redirect?auth%3Doauth", 
+                        "in": "query", 
                         "type": "string", 
-                        "name": "redirect_uri", 
-                        "in": "query"
+                        "name": "redirect_uri"
                     }, 
                     {
                         "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.", 
                         "required": true, 
+                        "x-example": "Example_AppID", 
+                        "in": "query", 
                         "type": "string", 
-                        "name": "client_id", 
-                        "in": "query"
+                        "name": "client_id"
                     }, 
                     {
                         "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.", 
                         "required": true, 
+                        "x-example": "code", 
+                        "in": "query", 
                         "type": "string", 
-                        "name": "response_type", 
-                        "in": "query"
+                        "name": "response_type"
                     }, 
                     {
-                        "description": "A string that is returned to the application with the response. It is useful for any state information the application may want to associate with the request. For example, it could contain the original endpoint that the user is trying to access and/or where the user should land on after a successful login.", 
+                        "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.", 
                         "required": false, 
+                        "x-example": "5aPY-C1JSeyTiUPWV_DLDw", 
+                        "in": "query", 
                         "type": "string", 
-                        "name": "state", 
-                        "in": "query"
+                        "name": "state"
+                    }, 
+                    {
+                        "description": "The list of scopes of the authorization request separated by a space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the OAuth2.0 client.", 
+                        "required": false, 
+                        "x-example": "openid+profile+email+user", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "scope"
                     }, 
                     {
                         "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ", 
@@ -91,7 +136,7 @@
                         "in": "query"
                     }, 
                     {
-                        "description": "Specifies the user's login. In caseyour application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.", 
+                        "description": "Specifies the user's login. In case your application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.", 
                         "required": false, 
                         "type": "string", 
                         "name": "u", 
@@ -102,9 +147,9 @@
                     "oauth2", 
                     "login"
                 ], 
-                "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. Your application must have an OAuth 2.0 client already registered in VMware Identity Manager with the 'authorization_code' grant type.", 
+                "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. To use this endpoint, your application must be registered as an OAuth 2.0 client in VMware Identity Manager and have the 'authorization_code' grant type enabled.", 
                 "summary": "OAuth 2.0 authorization endpoint", 
-                "operationId": "doOAuth2Authorize"
+                "operationId": "get-doOAuth2Authorize"
             }
         }, 
         "/SAAS/auth/oauthtoken": {
@@ -131,7 +176,7 @@
                 }, 
                 "parameters": [
                     {
-                        "description": "Specifies the type of authorization grant in exchange of an access token and possibly a refresh token. VMware Identity Manager supported values are: authorization_code, password, client_credentials, refresh_token and urn:ietf:params:oauth:grant-type:jwt-bearer.", 
+                        "description": "Specifies the OAuth grant type the client is making. VMware Identity Manager supports the following grant types from the OAuth specifications: authorization_code, password, client_credentials, and refresh_token. VMware Identity Manager also supports the grant type urn:ietf:params:oauth:grant-type:jwt-bearer for using JWTs for authorization as described in the JWT Bearer Token Profiles for OAuth 2.0 specifications.", 
                         "required": true, 
                         "type": "string", 
                         "name": "grant_type", 
@@ -140,16 +185,10 @@
                     {
                         "description": "The client identifier. If the HTTP Basic authentication scheme is not used, client must specify the client identifier using this request parameter. The use of HTTP Basic is recommended.\n", 
                         "required": false, 
+                        "x-example": "Example_AppID", 
+                        "in": "query", 
                         "type": "string", 
-                        "name": "client_id", 
-                        "in": "query"
-                    }, 
-                    {
-                        "description": "The client secret. This parameter is not required if there is no client secret.", 
-                        "required": false, 
-                        "type": "string", 
-                        "name": "client_secret", 
-                        "in": "query"
+                        "name": "client_id"
                     }, 
                     {
                         "description": "The username, UTF-8 encoded. Required only if the grant_type is 'password'", 
@@ -166,7 +205,7 @@
                         "in": "query"
                     }, 
                     {
-                        "description": "The scope of the access request. Required only if the grant_type is 'password'", 
+                        "description": "The list of scopes of the access request. Required only if the grant_type is 'password'", 
                         "required": false, 
                         "type": "string", 
                         "name": "scope", 
@@ -184,7 +223,173 @@
                         "basic_auth": []
                     }
                 ], 
-                "operationId": "handleRequest"
+                "operationId": "post-handleRequest"
+            }
+        }, 
+        "/SAAS/auth/device/register": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }, 
+                    "302": {
+                        "description": "VMware Identity Manager will redirect to the specified redirect_uri. The redirect URL will contain 'error' and 'error_description' query parameters if there is an error: the response_type is invalid or missing, the specified scope is unknown. Otherwise the redirect URL will contain the state, the activation code and the authorization code to exchange respectively in the activation and authorization subsequent requests."
+                    }, 
+                    "400": {
+                        "description": "The error can be any of those: the app_product_id does not exist, the user_device is not specified or incorrect, the redirect_uri is not specified or invalid or does not match the one in the app_product_id."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "Specifies the name of the template that was registered with VMware Identity Manager.", 
+                        "required": true, 
+                        "x-example": "VMware-AppAuth-Samples-Template", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "app_product_id"
+                    }, 
+                    {
+                        "description": "A JSON representation of a user's device. It contains device information.", 
+                        "required": true, 
+                        "x-example": "%7B%22osFamily%22%3A%22Android%22%2C%22extendedAttributeMap%22%3A%7B%22model%22%3A%22Android+SDK+built+for+x86%22%7D%2C%22machineName%22%3A%22unknown%22%2C%22osVersion%22%3A24%2C%22osName%22%3A%22Android%22%2C%22deviceId%22%3A%227ea00d46-35eb-4cd9-951a-4b790c14bb4f%22%7D", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "user_device"
+                    }, 
+                    {
+                        "description": "A unique identifier for the user's device.", 
+                        "required": true, 
+                        "x-example": "my+Android+123456", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "device_name"
+                    }, 
+                    {
+                        "description": "Must be 'code'.", 
+                        "required": true, 
+                        "x-example": "code", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "response_type"
+                    }, 
+                    {
+                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in the pre-created template in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
+                        "required": true, 
+                        "x-example": "com.vmware.idm.samples.mobilesso%3A%2F%2Foauth2redirect", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "redirect_uri"
+                    }, 
+                    {
+                        "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.", 
+                        "required": false, 
+                        "x-example": "5aPY-C1JSeyTiUPWV_DLDw", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "state"
+                    }, 
+                    {
+                        "description": "The list of scopes of the authorization request separated by space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the template.", 
+                        "required": false, 
+                        "x-example": "openid+profile+email+user", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "scope"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "login", 
+                    "mobile"
+                ], 
+                "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.", 
+                "summary": "Authenticate a user on a device by registering the user's device in the system.", 
+                "operationId": "post-doDeviceRegister"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }, 
+                    "302": {
+                        "description": "VMware Identity Manager will redirect to the specified redirect_uri. The redirect URL will contain 'error' and 'error_description' query parameters if there is an error: the response_type is invalid or missing, the specified scope is unknown. Otherwise the redirect URL will contain the state, the activation code and the authorization code to exchange respectively in the activation and authorization subsequent requests."
+                    }, 
+                    "400": {
+                        "description": "The error can be any of those: the app_product_id does not exist, the user_device is not specified or incorrect, the redirect_uri is not specified or invalid or does not match the one in the app_product_id."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "Specifies the name of the template that was registered with VMware Identity Manager.", 
+                        "required": true, 
+                        "x-example": "VMware-AppAuth-Samples-Template", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "app_product_id"
+                    }, 
+                    {
+                        "description": "A JSON representation of a user's device. It contains device information.", 
+                        "required": true, 
+                        "x-example": "%7B%22osFamily%22%3A%22Android%22%2C%22extendedAttributeMap%22%3A%7B%22model%22%3A%22Android+SDK+built+for+x86%22%7D%2C%22machineName%22%3A%22unknown%22%2C%22osVersion%22%3A24%2C%22osName%22%3A%22Android%22%2C%22deviceId%22%3A%227ea00d46-35eb-4cd9-951a-4b790c14bb4f%22%7D", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "user_device"
+                    }, 
+                    {
+                        "description": "A unique identifier for the user's device.", 
+                        "required": true, 
+                        "x-example": "my+Android+123456", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "device_name"
+                    }, 
+                    {
+                        "description": "Must be 'code'.", 
+                        "required": true, 
+                        "x-example": "code", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "response_type"
+                    }, 
+                    {
+                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in the pre-created template in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
+                        "required": true, 
+                        "x-example": "com.vmware.idm.samples.mobilesso%3A%2F%2Foauth2redirect", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "redirect_uri"
+                    }, 
+                    {
+                        "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.", 
+                        "required": false, 
+                        "x-example": "5aPY-C1JSeyTiUPWV_DLDw", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "state"
+                    }, 
+                    {
+                        "description": "The list of scopes of the authorization request separated by space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the template.", 
+                        "required": false, 
+                        "x-example": "openid+profile+email+user", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "scope"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "login", 
+                    "mobile"
+                ], 
+                "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.", 
+                "summary": "Authenticate a user on a device by registering the user's device in the system.", 
+                "operationId": "get-doDeviceRegister"
             }
         }
     }, 
@@ -218,41 +423,21 @@
     }, 
     "host": "localhost:8080", 
     "definitions": {
-        "LinkParams": {
-            "type": "object"
-        }, 
-        "OAuth2ClientSummary": {
+        "OAuth2ClientActivationDetails": {
             "type": "object", 
             "properties": {
-                "scope": {
+                "client_secret": {
                     "type": "string", 
-                    "example": "admin", 
-                    "description": "The scope of this OAuth 2.0 client"
+                    "example": "KVk06Qre8WQLNpMJVcNHsX5d7vHCVFf0DkxR1sDcT90dCZv", 
+                    "description": "The generated client secret"
                 }, 
-                "rememberAs": {
+                "client_id": {
                     "type": "string", 
-                    "example": "my oauth client", 
-                    "description": "The human friendly name of this OAuth 2.0 client"
-                }, 
-                "_links": {
-                    "additionalProperties": {
-                        "$ref": "#/definitions/Link"
-                    }, 
-                    "readOnly": true, 
-                    "type": "object"
-                }, 
-                "mediaType": {
-                    "type": "string", 
-                    "example": "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json", 
-                    "description": "Defines the media type of this OAuth 2.0 client (Client Credentials type or Classic type)"
-                }, 
-                "clientId": {
-                    "type": "string", 
-                    "example": "oauth_clientid", 
-                    "description": "The client identifier of this OAuth 2.0 client"
+                    "example": "MyAppTemplate@e9d80cec-4e12-4970-828d-ae4557e33174", 
+                    "description": "The generated client identifier"
                 }
             }, 
-            "description": "An OAuth 2.0 client object"
+            "description": "The response of the mobile device activation"
         }, 
         "Link": {
             "type": "object", 
@@ -297,6 +482,42 @@
                 }
             }, 
             "description": "The OAuth 2.0 token object"
+        }, 
+        "LinkParams": {
+            "type": "object"
+        }, 
+        "OAuth2ClientSummary": {
+            "type": "object", 
+            "properties": {
+                "scope": {
+                    "type": "string", 
+                    "example": "admin", 
+                    "description": "The scope of this OAuth 2.0 client"
+                }, 
+                "rememberAs": {
+                    "type": "string", 
+                    "example": "my oauth client", 
+                    "description": "The human friendly name of this OAuth 2.0 client"
+                }, 
+                "_links": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Link"
+                    }, 
+                    "readOnly": true, 
+                    "type": "object"
+                }, 
+                "mediaType": {
+                    "type": "string", 
+                    "example": "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json", 
+                    "description": "Defines the media type of this OAuth 2.0 client (Client Credentials type or Classic type)"
+                }, 
+                "clientId": {
+                    "type": "string", 
+                    "example": "oauth_clientid", 
+                    "description": "The client identifier of this OAuth 2.0 client"
+                }
+            }, 
+            "description": "An OAuth 2.0 client object"
         }, 
         "OAuth2ClientSummaryList": {
             "type": "object", 
