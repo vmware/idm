@@ -6,7 +6,7 @@ let a user authenticate with VMware Identity Manager™ and then use the access 
  access VMware Identity Manager resources (like the user information).
 
 This application is based on the [Spring Demo application](https://spring.io/guides/tutorials/spring-boot-oauth2/#_social_login_github)
-and has been modified to integrate Google and VMware Identity Manager as an authorization server.
+and has been modified to integrate VMware Identity Manager as an authorization server.
 
 ## Building the project
 
@@ -54,3 +54,10 @@ You can use the default values and log in to the demo VMware Identity Manager sy
 
 * Username: `userN`, where N=1..10
 * Password: `vmware`
+
+### What is happening?
+
+Your web application is a client application that authenticates the users using VMware Identity Manager
+through the OAuth2 authorization code grant and obtains an access token that is used to fetch some more information
+about the user. In that case, VMware Identity Manager is the authorization and resource server and check the access token before returning
+the user's information.

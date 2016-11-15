@@ -25,7 +25,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -35,8 +34,6 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -60,6 +57,11 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
     @Autowired
     OAuth2ClientContext oauth2ClientContext;
 
+    /**
+     * This endpoint requires the user to be authenticated: this /user endpoint is now secured with cookies created
+     * when the user authenticates through VMware Identity Manager.
+     * Spring will populate the "Principal" object with the logged-in user's information.
+     */
     @RequestMapping("/user")
     public Map<String, String> user(Principal principal) {
         Map<String, String> map = new LinkedHashMap<>();
@@ -83,6 +85,10 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
         SpringApplication.run(SocialApplication.class, args);
     }
 
+    /**
+     * Register the filter OAuth2ClientContextFilter that will handle the redirect to VMware Identity Manager
+     * if the user is not authenticated.
+     */
     @Bean
     public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -92,6 +98,7 @@ public class SocialApplication extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    // Defining a name allows us to use "vmware.xxx" instead of "security.oauth2.xxx" in the application.yml file
     @ConfigurationProperties("vmware")
     public ClientResources vmware() {
         return new ClientResources(new VMwarePrincipalExtractor());
