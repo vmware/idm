@@ -1,0 +1,12 @@
+vmware:
+  resource:
+    userInfoUri: https://dev.vmwareidentity.asia/SAAS/jersey/manager/api/userinfo
+    checkTokenUri: https://dev.vmwareidentity.asia/SAAS/API/1.0/REST/auth/token?attribute=isValid
+    localValidation: true
+    id: https://dev.vmwareidentity.asia/SAAS/auth/oauthtoken
+    jwt:
+      keyUri: https://dev.vmwareidentity.asia/SAAS/API/1.0/REST/auth/token?attribute=publicKey
+
+logging:
+  level:
+    org.springframework.security: DEBUG
