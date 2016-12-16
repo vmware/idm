@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build 1393fed9ffbbcc0beffe93fa48c607b2243c448f", 
+        "version": "Build 7651020f7997826c92d98b2a7e827801da8e50d7", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -12,58 +12,65 @@
         "title": "VMware Identity Manager"
     }, 
     "paths": {
-        "/SAAS/API/1.0/REST/oauth2/activate": {
+        "/SAAS/jersey/manager/api/scim/Users": {
             "post": {
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "successful operation", 
                         "schema": {
-                            "$ref": "#/definitions/OAuth2ClientActivationDetails"
+                            "$ref": "#/definitions/UserResource"
                         }
                     }, 
                     "500": {
-                        "description": "The activation code is invalid or not specified."
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "409": {
+                        "description": "A user with the same userName already exists"
+                    }, 
+                    "400": {
+                        "description": "The specified attributes are invalid or the userName of the user to be created is missing or invalid"
                     }
                 }, 
+                "description": "Creates a user in the system directory", 
                 "parameters": [
                     {
+                        "description": "list of attributes to return, separated by comma. When specified, the returned created user will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "x-example": "urn:scim:schemas:extension:workspace:1.0:internalUserType,externalId", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }, 
+                    {
+                        "description": "the user resource to be created as a JSON string", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{\n    \"schemas\": [\n        \"urn:scim:schemas:core:1.0\"\n        ],\n    \"userName\": \"test-user-10\",\n    \"name\": {\n        \"givenName\": \"firstName 10\",\n        \"familyName\": \"lastName 10\"\n    },\n    \"emails\": [\n        {\n            \"value\": \"test10@vmware.com\"\n        }\n    ],\n    \"password\": \"123456\"\n }"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
                         "schema": {
                             "type": "string"
-                        }, 
-                        "description": "the activation code", 
-                        "required": true, 
-                        "name": "body", 
-                        "in": "body"
-                    }
-                ], 
-                "tags": [
-                    "oauth2", 
-                    "mobile"
-                ], 
-                "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.", 
-                "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.", 
-                "operationId": "post-activateOauth2Client"
-            }
-        }, 
-        "/SAAS/jersey/manager/api/oauth2clients": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "successful operation", 
-                        "schema": {
-                            "$ref": "#/definitions/OAuth2ClientSummaryList"
                         }
+                    }, 
+                    {
+                        "description": "whether or not to send email to set the password. This parameter is used only if the password is not set in the JSON body. If set to 'false', the returned user resource will contain an OTA link to set the password. The default is 'true'", 
+                        "default": true, 
+                        "required": false, 
+                        "x-example": "false", 
+                        "in": "query", 
+                        "type": "boolean", 
+                        "name": "sendMail"
                     }
-                }, 
-                "produces": [
-                    "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
                 ], 
-                "description": "This endpoint is used to read the list of OAuth 2.0 clients VMware Identity Manager has registered.", 
+                "produces": [
+                    "application/json"
+                ], 
                 "tags": [
-                    "oauth2", 
+                    "scim", 
                     "admin"
                 ], 
-                "summary": "List existing OAuth 2.0 clients", 
+                "summary": "Create a local user", 
                 "security": [
                     {
                         "admin_oauth2": [
@@ -71,7 +78,257 @@
                         ]
                     }
                 ], 
-                "operationId": "get-getOAuth2ClientSummaryList"
+                "operationId": "post-postUser"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/Resources"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If the query parameter values are invalid for \"sortBy\", \"count\" or \"startIndex\""
+                    }, 
+                    "400": {
+                        "description": "The specified filter operation is invalid or the specified \"attributes\" are invalid"
+                    }
+                }, 
+                "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15", 
+                "parameters": [
+                    {
+                        "description": "list of attributes to return, separated by comma. When specified, the retrieved user(s) will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "x-example": "userName,groups", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }, 
+                    {
+                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "required": false, 
+                        "x-example": "userName co \"j\"", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "filter"
+                    }, 
+                    {
+                        "description": "offset of the first user to return in the list of found users. This is used for pagination", 
+                        "format": "int32", 
+                        "default": 0, 
+                        "required": false, 
+                        "x-example": 10, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "startIndex"
+                    }, 
+                    {
+                        "description": "the number of found users to return starting from the given startIndex. This is used for pagination", 
+                        "format": "int32", 
+                        "default": 20, 
+                        "required": false, 
+                        "x-example": 50, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "count"
+                    }, 
+                    {
+                        "description": "the attribute to use to sort the found user", 
+                        "required": false, 
+                        "x-example": "userName", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "sortBy"
+                    }, 
+                    {
+                        "enum": [
+                            "ascending", 
+                            "descending"
+                        ], 
+                        "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\".", 
+                        "required": false, 
+                        "x-example": "descending", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "sortOrder"
+                    }, 
+                    {
+                        "description": "custom schema extension types for which user schema attributes need to be included", 
+                        "required": false, 
+                        "x-example": "myCustomSchema", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "customSchemaExtensionTypes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Find all users or only users matching a supplied filter", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getUsers"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Users/{id}": {
+            "patch": {
+                "responses": {
+                    "403": {
+                        "description": "The user is not a local user and can not be updated"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "The supplied JSON is incorrect"
+                    }
+                }, 
+                "description": "Updates user's information. The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to update", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "the user resource updated information as a JSON string", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{ \"name\": { \"givenName\": \"Updated given name\" }}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Update a user found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "patch-patchUser"
+            }, 
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "The specified user does not exist"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }
+                }, 
+                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to delete", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Delete a user found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "delete-deleteUser"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/UserResource"
+                        }
+                    }
+                }, 
+                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to retrieve", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "when specified, the returned user will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "attributes", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "the directory identifier. This identifier will be used to retrieve local directory's user attribute definitions (if any). If not specified, the user attribute definitions defined for the tenant will be used.", 
+                        "required": false, 
+                        "x-example": "ca6c160e-5bb9-422c-8d71-777a90241dea", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "directoryUuid"
+                    }, 
+                    {
+                        "description": "custom schema extension types for which user schema attributes needs to be included", 
+                        "required": false, 
+                        "x-example": "my-custom-schema", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "customSchemaExtensionTypes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Get a user by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getUser"
             }
         }, 
         "/SAAS/auth/oauth2/authorize": {
@@ -152,6 +409,171 @@
                 "operationId": "get-doOAuth2Authorize"
             }
         }, 
+        "/SAAS/jersey/manager/api/oauth2clients": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientSummaryList"
+                        }
+                    }
+                }, 
+                "produces": [
+                    "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
+                ], 
+                "description": "This endpoint is used to read the list of OAuth 2.0 clients VMware Identity Manager has registered.", 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "summary": "List existing OAuth 2.0 clients", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getOAuth2ClientSummaryList"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Groups/{id}": {
+            "patch": {
+                "responses": {
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "The supplied JSON is incorrect"
+                    }
+                }, 
+                "description": "Updates group's information. The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.", 
+                "parameters": [
+                    {
+                        "description": "the id of the group to update", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "the group resource updated information as a JSON string", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{\n\t\"displayName\": \"updated-test-group\"\n}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Update a group found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/json"
+                ], 
+                "operationId": "patch-patchGroup"
+            }, 
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "The specified group does not exist."
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred."
+                    }
+                }, 
+                "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the group to delete", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Delete a group found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "delete-deleteGroup"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/GroupResource"
+                        }
+                    }
+                }, 
+                "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the group to retrieve", 
+                        "required": true, 
+                        "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "when specified, the returned group will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "x-example": "displayName", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Get a group by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getGroup"
+            }
+        }, 
         "/SAAS/auth/oauthtoken": {
             "post": {
                 "responses": {
@@ -205,10 +627,31 @@
                         "in": "query"
                     }, 
                     {
+                        "description": "The domain the user belongs to. Optional and only used if the grant_type is 'password'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "domain", 
+                        "in": "query"
+                    }, 
+                    {
                         "description": "The list of scopes of the access request. Required only if the grant_type is 'password'", 
                         "required": false, 
                         "type": "string", 
                         "name": "scope", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The authorization code received from the authorize request. Required only if the grant_type is 'authorization_code'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "code", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "The redirect_uri as provided to the authorize request. Required only if the grant_type is 'authorization_code'", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "redirect_uri", 
                         "in": "query"
                     }
                 ], 
@@ -224,6 +667,236 @@
                     }
                 ], 
                 "operationId": "post-handleRequest"
+            }
+        }, 
+        "/SAAS/API/1.0/REST/oauth2/activate": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientActivationDetails"
+                        }
+                    }, 
+                    "500": {
+                        "description": "The activation code is invalid or not specified."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string"
+                        }, 
+                        "description": "the activation code", 
+                        "required": true, 
+                        "name": "body", 
+                        "in": "body"
+                    }
+                ], 
+                "tags": [
+                    "mobile", 
+                    "oauth2"
+                ], 
+                "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.", 
+                "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.", 
+                "operationId": "post-activateOauth2Client"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Groups": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/GroupResource"
+                        }
+                    }, 
+                    "409": {
+                        "description": "A group with the same displayName already exists"
+                    }, 
+                    "400": {
+                        "description": "The specified attributes are invalid or the displayName of the group to be created is missing or invalid"
+                    }
+                }, 
+                "description": "Creates a group in the system directory", 
+                "parameters": [
+                    {
+                        "description": "list of attributes to return, separated by comma. When specified, the returned created group will only contain the minimal set of group attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "x-example": "urn:scim:schemas:extension:workspace:1.0:domain,groupName", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }, 
+                    {
+                        "description": "the group resource to be created as a JSON string", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{\n\t\"schemas\": [ \"urn:scim:schemas:core:1.0\" ], \n\t\"displayName\": \"test-group\"\n}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Create a local group", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/json"
+                ], 
+                "operationId": "post-postGroup"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/Resources"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If the query parameter values are invalid for \"count\" or \"startIndex\""
+                    }, 
+                    "400": {
+                        "description": "The specified filter operation is invalid or the specified \"attributes\" are invalid or the \"sortBy\" parameter is invalid"
+                    }
+                }, 
+                "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15", 
+                "parameters": [
+                    {
+                        "description": "list of attributes to return, separated by comma. When specified, the retrieved group(s) will only contain the minimal set of group attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "x-example": "displayName,urn:scim:schemas:extension:workspace:1.0:email", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }, 
+                    {
+                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "required": false, 
+                        "x-example": "displayName co \"test\"", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "filter"
+                    }, 
+                    {
+                        "description": "offset of the first group to return in the list of found groups", 
+                        "format": "int32", 
+                        "required": false, 
+                        "x-example": 10, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "startIndex"
+                    }, 
+                    {
+                        "description": "the number of found groups to return starting from the given startIndex", 
+                        "format": "int32", 
+                        "required": false, 
+                        "x-example": 50, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "count"
+                    }, 
+                    {
+                        "description": "the attribute to use to sort the found group", 
+                        "required": false, 
+                        "x-example": "displayName", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "sortBy"
+                    }, 
+                    {
+                        "enum": [
+                            "ascending", 
+                            "descending"
+                        ], 
+                        "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\"", 
+                        "required": false, 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "sortOrder"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Find all groups or only groups matching a supplied filter", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getGroups"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Groups/.search": {
+            "post": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/Resources"
+                        }
+                    }, 
+                    "400": {
+                        "description": "The specified search request is invalid"
+                    }
+                }, 
+                "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.This serves the same function as the GET /scim/Groups API but using a POST method so that the length of the request is not limited.", 
+                "parameters": [
+                    {
+                        "description": "the search request", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{\n\t\"filter\" : \"displayName co \\\"internal\\\"\",\n\t\"attributes\" : \"displayName\",\n\t\"sortBy\" : \"displayName\"\n}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "$ref": "#/definitions/SearchRequest"
+                        }
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Find all groups or only groups matching a supplied filter", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/json"
+                ], 
+                "operationId": "post-findGroups"
             }
         }, 
         "/SAAS/auth/device/register": {
@@ -301,9 +974,9 @@
                     }
                 ], 
                 "tags": [
+                    "mobile", 
                     "oauth2", 
-                    "login", 
-                    "mobile"
+                    "login"
                 ], 
                 "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.", 
                 "summary": "Authenticate a user on a device by registering the user's device in the system.", 
@@ -383,9 +1056,9 @@
                     }
                 ], 
                 "tags": [
+                    "mobile", 
                     "oauth2", 
-                    "login", 
-                    "mobile"
+                    "login"
                 ], 
                 "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.", 
                 "summary": "Authenticate a user on a device by registering the user's device in the system.", 
@@ -402,6 +1075,9 @@
         }, 
         {
             "name": "oauth2"
+        }, 
+        {
+            "name": "scim"
         }
     ], 
     "basePath": "/", 
@@ -423,31 +1099,26 @@
     }, 
     "host": "localhost:8080", 
     "definitions": {
-        "OAuth2ClientActivationDetails": {
+        "Name": {
             "type": "object", 
             "properties": {
-                "client_secret": {
-                    "type": "string", 
-                    "example": "KVk06Qre8WQLNpMJVcNHsX5d7vHCVFf0DkxR1sDcT90dCZv", 
-                    "description": "The generated client secret"
+                "honorificPrefix": {
+                    "type": "string"
                 }, 
-                "client_id": {
-                    "type": "string", 
-                    "example": "MyAppTemplate@e9d80cec-4e12-4970-828d-ae4557e33174", 
-                    "description": "The generated client identifier"
-                }
-            }, 
-            "description": "The response of the mobile device activation"
-        }, 
-        "Link": {
-            "type": "object", 
-            "properties": {
-                "href": {
-                    "type": "string", 
-                    "format": "uri"
+                "middleName": {
+                    "type": "string"
                 }, 
-                "params": {
-                    "$ref": "#/definitions/LinkParams"
+                "familyName": {
+                    "type": "string"
+                }, 
+                "formatted": {
+                    "type": "string"
+                }, 
+                "givenName": {
+                    "type": "string"
+                }, 
+                "honorificSuffix": {
+                    "type": "string"
                 }
             }
         }, 
@@ -483,8 +1154,254 @@
             }, 
             "description": "The OAuth 2.0 token object"
         }, 
-        "LinkParams": {
-            "type": "object"
+        "AttributeDescriptor": {
+            "type": "object", 
+            "properties": {
+                "subAttributes": {
+                    "items": {
+                        "$ref": "#/definitions/AttributeDescriptor"
+                    }, 
+                    "type": "array"
+                }, 
+                "description": {
+                    "type": "string"
+                }, 
+                "canonicalValues": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "dataType": {
+                    "enum": [
+                        "STRING", 
+                        "BOOLEAN", 
+                        "DATETIME", 
+                        "DECIMAL", 
+                        "INTEGER", 
+                        "BINARY", 
+                        "COMPLEX"
+                    ], 
+                    "type": "string"
+                }, 
+                "required": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "caseExact": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "multiValuedChildName": {
+                    "type": "string"
+                }, 
+                "readOnly": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "multiValued": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "schema": {
+                    "type": "string"
+                }, 
+                "name": {
+                    "type": "string"
+                }
+            }
+        }, 
+        "UserResource": {
+            "type": "object", 
+            "properties": {
+                "domain": {
+                    "type": "string", 
+                    "example": "acme.com", 
+                    "description": "The user domain: can be the domain coming from an external source as AD or a local domain like 'System Domain'"
+                }, 
+                "addresses": {
+                    "items": {
+                        "$ref": "#/definitions/Address"
+                    }, 
+                    "type": "array"
+                }, 
+                "locale": {
+                    "type": "string"
+                }, 
+                "internalUserType": {
+                    "type": "string", 
+                    "example": "PROVISIONED", 
+                    "description": "The user internal type. Possible values are: PROVISIONED, LOCAL, OPERATOR, SERVICE and JIT "
+                }, 
+                "userPrincipalName": {
+                    "type": "string", 
+                    "example": "user1@acme.com", 
+                    "description": "The user principal name if available"
+                }, 
+                "userType": {
+                    "type": "string"
+                }, 
+                "manager": {
+                    "$ref": "#/definitions/Manager"
+                }, 
+                "meta": {
+                    "$ref": "#/definitions/Meta"
+                }, 
+                "groups": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "id": {
+                    "type": "string"
+                }, 
+                "distinguishedName": {
+                    "type": "string", 
+                    "example": "CN=user1,CN=Users,DC=acme,DC=com", 
+                    "description": "The user distinguished name if available"
+                }, 
+                "resourceDescriptor": {
+                    "$ref": "#/definitions/ResourceDescriptor"
+                }, 
+                "title": {
+                    "type": "string"
+                }, 
+                "preferredLanguage": {
+                    "type": "string"
+                }, 
+                "userStatus": {
+                    "type": "string", 
+                    "example": "1", 
+                    "description": "The user status, available values are: 1 for enabled, 2 for disabled and 3 for deleted user"
+                }, 
+                "scimObject": {
+                    "$ref": "#/definitions/SCIMObject"
+                }, 
+                "ims": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "externalId": {
+                    "type": "string"
+                }, 
+                "entitlements": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "firstLoginUrl": {
+                    "type": "string", 
+                    "description": "The URL to setup the user's password after the initial creation. Only available after creating the user and if the password was not set"
+                }, 
+                "nickName": {
+                    "type": "string"
+                }, 
+                "userStoreUuid": {
+                    "type": "string", 
+                    "example": "19175b6d-a656-451a-9d25-b62e12d90a24", 
+                    "description": "The user store identifier"
+                }, 
+                "photos": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "employeeNumber": {
+                    "type": "string", 
+                    "example": "100007", 
+                    "description": "The user employee number if available: a string identifier, typically numeric or alphanumeric, assigned\n      to a person, typically based on order of hire or association with\n      an organization."
+                }, 
+                "phoneNumbers": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "active": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "password": {
+                    "type": "string"
+                }, 
+                "emails": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "userName": {
+                    "type": "string"
+                }, 
+                "displayName": {
+                    "type": "string"
+                }, 
+                "name": {
+                    "$ref": "#/definitions/Name"
+                }, 
+                "roles": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "profileUrl": {
+                    "type": "string"
+                }, 
+                "timeZone": {
+                    "type": "string"
+                }
+            }, 
+            "description": "The SCIM user resource object. It extends the standard SCIM user resource, see https://tools.ietf.org/html/rfc7643"
+        }, 
+        "SearchRequest": {
+            "type": "object", 
+            "properties": {
+                "customSchemaExtensionTypes": {
+                    "type": "string"
+                }, 
+                "count": {
+                    "description": "The number of found resources to return starting from the given startIndex. This is used for pagination. Default is 20", 
+                    "type": "integer", 
+                    "example": 50, 
+                    "format": "int32"
+                }, 
+                "excludedAttributes": {
+                    "type": "string"
+                }, 
+                "filter": {
+                    "type": "string", 
+                    "example": "displayName co \"test\"", 
+                    "description": "The search filter. When specified, only resources matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators"
+                }, 
+                "startIndex": {
+                    "description": "Offset of the first resource to return in the list of found resources. This is used for pagination. Default is 0", 
+                    "type": "integer", 
+                    "example": 1, 
+                    "format": "int32"
+                }, 
+                "sortOrder": {
+                    "type": "string", 
+                    "example": "descending", 
+                    "description": "The direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\""
+                }, 
+                "attributes": {
+                    "type": "string", 
+                    "example": "displayName", 
+                    "description": "The attributes to be returned. When specified, the returned resource will contain the minimal set of resource attributes plus the attributes or sub-attributes explicitly requested. "
+                }, 
+                "sortBy": {
+                    "type": "string", 
+                    "example": "displayName", 
+                    "description": "The attribute to use to sort the found resource"
+                }
+            }, 
+            "description": "The SCIM search request object. To be used in requests via POST HTTP method"
         }, 
         "OAuth2ClientSummary": {
             "type": "object", 
@@ -518,6 +1435,279 @@
                 }
             }, 
             "description": "An OAuth 2.0 client object"
+        }, 
+        "EntryString": {
+            "type": "object", 
+            "properties": {
+                "operation": {
+                    "type": "string"
+                }, 
+                "type": {
+                    "type": "string"
+                }, 
+                "primary": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "value": {
+                    "type": "string"
+                }, 
+                "display": {
+                    "type": "string"
+                }
+            }
+        }, 
+        "SCIMObject": {
+            "type": "object", 
+            "properties": {
+                "schemas": {
+                    "uniqueItems": true, 
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array"
+                }
+            }
+        }, 
+        "LinkParams": {
+            "type": "object"
+        }, 
+        "Manager": {
+            "type": "object", 
+            "properties": {
+                "displayName": {
+                    "type": "string"
+                }, 
+                "managerId": {
+                    "type": "string"
+                }
+            }
+        }, 
+        "Meta": {
+            "type": "object", 
+            "properties": {
+                "lastModified": {
+                    "type": "string", 
+                    "format": "date-time"
+                }, 
+                "version": {
+                    "type": "string"
+                }, 
+                "location": {
+                    "type": "string", 
+                    "format": "uri"
+                }, 
+                "created": {
+                    "type": "string", 
+                    "format": "date-time"
+                }
+            }
+        }, 
+        "Link": {
+            "type": "object", 
+            "properties": {
+                "href": {
+                    "type": "string", 
+                    "format": "uri"
+                }, 
+                "params": {
+                    "$ref": "#/definitions/LinkParams"
+                }
+            }
+        }, 
+        "Address": {
+            "type": "object", 
+            "properties": {
+                "locality": {
+                    "type": "string"
+                }, 
+                "country": {
+                    "type": "string"
+                }, 
+                "region": {
+                    "type": "string"
+                }, 
+                "formatted": {
+                    "type": "string"
+                }, 
+                "primary": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "streetAddress": {
+                    "type": "string"
+                }, 
+                "postalCode": {
+                    "type": "string"
+                }, 
+                "type": {
+                    "type": "string"
+                }
+            }
+        }, 
+        "GroupResource": {
+            "type": "object", 
+            "properties": {
+                "distinguishedName": {
+                    "type": "string", 
+                    "example": "CN=all-admin-users,CN=Users,DC=acme,DC=com", 
+                    "description": "The group distinguished name if available"
+                }, 
+                "internalGroupType": {
+                    "type": "string", 
+                    "example": "EXTERNAL", 
+                    "description": "The internal group type. Available values are: 'EXTERNAL' (when the group comes from an external source), DYNAMIC (local group with custom rules), INTERNAL (local group with static rules), ALL_USERS (the default group containing all users)"
+                }, 
+                "domain": {
+                    "type": "string", 
+                    "example": "acme.com", 
+                    "description": "The group domain: can be the domain coming from an external source as AD or a local domain like 'System Domain'"
+                }, 
+                "displayName": {
+                    "type": "string"
+                }, 
+                "resourceDescriptor": {
+                    "$ref": "#/definitions/ResourceDescriptor"
+                }, 
+                "roles": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "compositionRules": {
+                    "type": "string", 
+                    "example": "{\n  \"addedUserIds\" : [ ],\n  \"excludedUserIds\" : [ ],\n  \"rule\" : {\n    \"type\" : \"internalGroup\",\n    \"groupId\" : \"53cc45f9-2e21-4fa4-ae81-32e6fb15bd91\"\n  }\n}", 
+                    "description": "The group composition rules. Those rules are populated with relevant information when a dynamic group is created."
+                }, 
+                "memberCount": {
+                    "type": "integer", 
+                    "format": "int64"
+                }, 
+                "scimObject": {
+                    "$ref": "#/definitions/SCIMObject"
+                }, 
+                "userStoreUuid": {
+                    "type": "string", 
+                    "example": "acme.com", 
+                    "description": "The group user store identifier (userStoreUuid) if available. This is deprecated and will be replaced soon by the directory identifier"
+                }, 
+                "meta": {
+                    "$ref": "#/definitions/Meta"
+                }, 
+                "parents": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array", 
+                    "description": "The list of group parents if available. The groups can be nested and VMware Identity Manager will return the full hierarchy"
+                }, 
+                "members": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
+                }, 
+                "id": {
+                    "type": "string"
+                }, 
+                "externalId": {
+                    "type": "string"
+                }, 
+                "email": {
+                    "type": "string", 
+                    "example": "all-admin-users@acme.com", 
+                    "description": "The group email if available"
+                }, 
+                "description": {
+                    "type": "string", 
+                    "example": "The group for all admin users", 
+                    "description": "The group description if available"
+                }
+            }, 
+            "description": "The SCIM group resource object. It extends the standard SCIM group resource, see https://tools.ietf.org/html/rfc7643"
+        }, 
+        "ResourceDescriptor": {
+            "type": "object", 
+            "properties": {
+                "endpoint": {
+                    "type": "string"
+                }, 
+                "resourceDescriptor": {
+                    "$ref": "#/definitions/ResourceDescriptor"
+                }, 
+                "name": {
+                    "type": "string"
+                }, 
+                "attributeSchemas": {
+                    "uniqueItems": true, 
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array"
+                }, 
+                "description": {
+                    "type": "string"
+                }, 
+                "strictMode": {
+                    "default": false, 
+                    "type": "boolean"
+                }, 
+                "scimObject": {
+                    "$ref": "#/definitions/SCIMObject"
+                }, 
+                "meta": {
+                    "$ref": "#/definitions/Meta"
+                }, 
+                "externalId": {
+                    "type": "string"
+                }, 
+                "attributes": {
+                    "items": {
+                        "$ref": "#/definitions/AttributeDescriptor"
+                    }, 
+                    "type": "array"
+                }, 
+                "id": {
+                    "type": "string"
+                }, 
+                "schema": {
+                    "type": "string"
+                }
+            }
+        }, 
+        "OAuth2ClientActivationDetails": {
+            "type": "object", 
+            "properties": {
+                "client_secret": {
+                    "type": "string", 
+                    "example": "KVk06Qre8WQLNpMJVcNHsX5d7vHCVFf0DkxR1sDcT90dCZv", 
+                    "description": "The generated client secret"
+                }, 
+                "client_id": {
+                    "type": "string", 
+                    "example": "MyAppTemplate@e9d80cec-4e12-4970-828d-ae4557e33174", 
+                    "description": "The generated client identifier"
+                }
+            }, 
+            "description": "The response of the mobile device activation"
+        }, 
+        "Resources": {
+            "type": "object", 
+            "properties": {
+                "itemsPerPage": {
+                    "type": "integer", 
+                    "format": "int32"
+                }, 
+                "startIndex": {
+                    "type": "integer", 
+                    "format": "int64"
+                }, 
+                "totalResults": {
+                    "type": "integer", 
+                    "format": "int64"
+                }
+            }
         }, 
         "OAuth2ClientSummaryList": {
             "type": "object", 
