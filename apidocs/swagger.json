@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build 7651020f7997826c92d98b2a7e827801da8e50d7", 
+        "version": "Build 2a7b745497da009de91c7deb40abb1f778ce3bac", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -180,6 +180,84 @@
                 "operationId": "get-getUsers"
             }
         }, 
+        "/SAAS/auth/oauth2/authorize": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }, 
+                    "400": {
+                        "description": "The error can be any of those: no client_id has been specified, the client_id does not exist, the redirect_uri has not been specified or does not match. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in your OAuth2.0 client registration in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
+                        "required": true, 
+                        "x-example": "https://example-app.com/redirect?auth%3Doauth", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "redirect_uri"
+                    }, 
+                    {
+                        "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.", 
+                        "required": true, 
+                        "x-example": "Example_AppID", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "client_id"
+                    }, 
+                    {
+                        "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.", 
+                        "required": true, 
+                        "x-example": "code", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "response_type"
+                    }, 
+                    {
+                        "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.", 
+                        "required": false, 
+                        "x-example": "5aPY-C1JSeyTiUPWV_DLDw", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "state"
+                    }, 
+                    {
+                        "description": "The list of scopes of the authorization request separated by a space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the OAuth2.0 client.", 
+                        "required": false, 
+                        "x-example": "openid+profile+email+user", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "scope"
+                    }, 
+                    {
+                        "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "domain", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "Specifies the user's login. In case your application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "u", 
+                        "in": "query"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "login"
+                ], 
+                "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. To use this endpoint, your application must be registered as an OAuth 2.0 client in VMware Identity Manager and have the 'authorization_code' grant type enabled.", 
+                "summary": "OAuth 2.0 authorization endpoint", 
+                "operationId": "get-doOAuth2Authorize"
+            }
+        }, 
         "/SAAS/jersey/manager/api/scim/Users/{id}": {
             "patch": {
                 "responses": {
@@ -331,82 +409,23 @@
                 "operationId": "get-getUser"
             }
         }, 
-        "/SAAS/auth/oauth2/authorize": {
+        "/SAAS/auth/.well-known/openid-configuration": {
             "get": {
+                "operationId": "get-getOpenIDConfiguration", 
                 "responses": {
                     "200": {
                         "description": "successful operation", 
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/OpenIDConfiguration"
                         }
-                    }, 
-                    "400": {
-                        "description": "The error can be any of those: no client_id has been specified, the client_id does not exist, the redirect_uri has not been specified or does not match. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
                     }
                 }, 
-                "parameters": [
-                    {
-                        "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in your OAuth2.0 client registration in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.", 
-                        "required": true, 
-                        "x-example": "https://example-app.com/redirect?auth%3Doauth", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "redirect_uri"
-                    }, 
-                    {
-                        "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.", 
-                        "required": true, 
-                        "x-example": "Example_AppID", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "client_id"
-                    }, 
-                    {
-                        "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.", 
-                        "required": true, 
-                        "x-example": "code", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "response_type"
-                    }, 
-                    {
-                        "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.", 
-                        "required": false, 
-                        "x-example": "5aPY-C1JSeyTiUPWV_DLDw", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "state"
-                    }, 
-                    {
-                        "description": "The list of scopes of the authorization request separated by a space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the OAuth2.0 client.", 
-                        "required": false, 
-                        "x-example": "openid+profile+email+user", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "scope"
-                    }, 
-                    {
-                        "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ", 
-                        "required": false, 
-                        "type": "string", 
-                        "name": "domain", 
-                        "in": "query"
-                    }, 
-                    {
-                        "description": "Specifies the user's login. In case your application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.", 
-                        "required": false, 
-                        "type": "string", 
-                        "name": "u", 
-                        "in": "query"
-                    }
-                ], 
+                "summary": "OpenID Connect discovery endpoint", 
+                "description": "This endpoint follows the specification defined at http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. It provides a mechanism for an OpenID Connect Relying Party to discover the End-User's OpenID Provider and obtain information needed to interact with it, including its OAuth 2.0 endpoint locations.", 
                 "tags": [
                     "oauth2", 
-                    "login"
-                ], 
-                "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. To use this endpoint, your application must be registered as an OAuth 2.0 client in VMware Identity Manager and have the 'authorization_code' grant type enabled.", 
-                "summary": "OAuth 2.0 authorization endpoint", 
-                "operationId": "get-doOAuth2Authorize"
+                    "oidc"
+                ]
             }
         }, 
         "/SAAS/jersey/manager/api/oauth2clients": {
@@ -436,6 +455,172 @@
                     }
                 ], 
                 "operationId": "get-getOAuth2ClientSummaryList"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Roles/{id}": {
+            "patch": {
+                "responses": {
+                    "404": {
+                        "description": "If role or role member id is not found"
+                    }, 
+                    "403": {
+                        "description": "Unauthorized"
+                    }, 
+                    "500": {
+                        "description": "Server error while patching SCIM role"
+                    }, 
+                    "401": {
+                        "description": "Unauthorized"
+                    }, 
+                    "400": {
+                        "description": "One or more of the specified \"attributes\" parameter values is invalid"
+                    }
+                }, 
+                "description": "Updates role's information. Commonly used to assign users to this role. The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=...\nPatch operation allows to send in the request the attributes that need to be changed only.", 
+                "parameters": [
+                    {
+                        "description": "the id of the role to update", 
+                        "required": true, 
+                        "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "the attributes or sub-attributes to update. schemas attribute must be declared.", 
+                        "required": true, 
+                        "x-example": "{\"schemas\": [\"urn:scim:schemas:core:1.0\"],\"members\": [{\"value\": \"user1\",\"type\": \"User\"}]}", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Update a role found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/json"
+                ], 
+                "operationId": "patch-patchRole"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/RoleResource"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If role id is not found"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "One or more of the specified \"attributes\" parameter values is invalid"
+                    }
+                }, 
+                "description": "Get additional role information using the role unique identifier (id). The role id can be retrieved using the search API /scim/Roles?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the role to retrieve", 
+                        "required": true, 
+                        "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "list of attributes to return, separated by comma. When specified, the retrieved role will only contain the minimal set of role attributes plus the attributes or sub-attributes explicitly requested, i.e. {urn}:{Attribute name}.{Sub-Attribute name}", 
+                        "required": false, 
+                        "x-example": "displayName,meta.version,urn:scim:schemas:extension:workspace:1.0:description,", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Get a role by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getRole"
+            }
+        }, 
+        "/SAAS/API/1.0/REST/auth/token": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "enum": [
+                            "isValid", 
+                            "isRevoked", 
+                            "publicKey"
+                        ], 
+                        "description": "the type of operation to perform on the token. Use \"isValid\" to validate a token, \"isRevoked\" to check the revocation status, and \"publicKey\" to retrieve the public key", 
+                        "required": true, 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attribute"
+                    }, 
+                    {
+                        "description": "the tenant to retrieve the public key for (only valid when attribute is publicKey), if the tenant is different from the one in the request URL", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "tenant", 
+                        "in": "query"
+                    }, 
+                    {
+                        "enum": [
+                            "pem", 
+                            "jwks", 
+                            "jwk"
+                        ], 
+                        "description": "the format of the public key (only valid when attribute is publicKey). Use \"pem\" to retrieve the key in PEM format, \"jwks\" to get the key in JWKS format, and \"jwk\" to get in the key in the JWK format (early draft)", 
+                        "default": "jwk", 
+                        "required": false, 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "format"
+                    }
+                ], 
+                "tags": [
+                    "oauth2", 
+                    "oidc"
+                ], 
+                "description": "This endpoint allows applications to validate the access token issued by VMware Identity Manager, and to retrieve the public key used to sign the token.", 
+                "summary": "Retrieve the public key to validate a token or check the given access token", 
+                "operationId": "get-getTokenAttribute"
             }
         }, 
         "/SAAS/jersey/manager/api/scim/Groups/{id}": {
@@ -667,6 +852,80 @@
                     }
                 ], 
                 "operationId": "post-handleRequest"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Roles": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/RoleResource"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If the query parameter values are invalid for \"count\" or \"startIndex\""
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "The specified \"filter\" or \"attributes\" parameter values are invalid"
+                    }
+                }, 
+                "description": "The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=", 
+                "parameters": [
+                    {
+                        "description": "list of attributes to return, separated by comma. When specified, the retrieved role(s)will only contain the minimal set of role attributes plus the attributes or sub-attributes explicitly requested, i.e. {urn}:{Attribute name}.{Sub-Attribute name}", 
+                        "required": false, 
+                        "x-example": "displayName,meta.version,urn:scim:schemas:extension:workspace:1.0:description,", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "attributes"
+                    }, 
+                    {
+                        "description": "when specified, only roles matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "required": false, 
+                        "x-example": "displayName co \"User\"", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "filter"
+                    }, 
+                    {
+                        "description": "offset of the first role to return in the list of found roles", 
+                        "format": "int32", 
+                        "required": false, 
+                        "x-example": 10, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "startIndex"
+                    }, 
+                    {
+                        "description": "the number of found roles to return starting from the given startIndex", 
+                        "format": "int32", 
+                        "required": false, 
+                        "x-example": 50, 
+                        "in": "query", 
+                        "type": "integer", 
+                        "name": "count"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Find all roles or only roles matching a supplied filter", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getRoles"
             }
         }, 
         "/SAAS/API/1.0/REST/oauth2/activate": {
@@ -1099,6 +1358,81 @@
     }, 
     "host": "localhost:8080", 
     "definitions": {
+        "OpenIDConfiguration": {
+            "required": [
+                "authorization_endpoint", 
+                "id_token_signing_alg_values_supported", 
+                "issuer", 
+                "jwks_uri", 
+                "response_types_supported", 
+                "subject_types_supported", 
+                "token_endpoint"
+            ], 
+            "type": "object", 
+            "properties": {
+                "userinfo_endpoint": {
+                    "type": "string", 
+                    "example": "https://acme.vmwareidentity.com/SAAS/jersey/manager/api/userinfo", 
+                    "description": "URL of the user info endpoint"
+                }, 
+                "jwks_uri": {
+                    "type": "string", 
+                    "example": "https://acme.vmwareidentity.com/SAAS/API/1.0/REST/auth/token?attribute=publicKey&format=jwks", 
+                    "description": "URL of JSON Web Key Set document"
+                }, 
+                "scopes_supported": {
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array", 
+                    "description": "list of the OAuth 2.0 scope values that VMware Identity Manager supports"
+                }, 
+                "subject_types_supported": {
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array", 
+                    "description": "list of the Subject Identifier types that VMware Identity Manager supports"
+                }, 
+                "token_endpoint": {
+                    "type": "string", 
+                    "example": "https://acme.vmwareidentity.com/SAAS/auth/oauthtoken", 
+                    "description": "URL of the OAuth 2.0 token endpoint"
+                }, 
+                "id_token_signing_alg_values_supported": {
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array", 
+                    "description": "list of the JWS signing algorithms supported for the ID Token to encode the Claims in a JWT"
+                }, 
+                "response_types_supported": {
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array", 
+                    "description": "list of the OAuth 2.0 response_type values that VMware Identity Manager supports"
+                }, 
+                "claims_supported": {
+                    "items": {
+                        "type": "string"
+                    }, 
+                    "type": "array", 
+                    "description": "list of the claims VMware Identity Manager may be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list"
+                }, 
+                "authorization_endpoint": {
+                    "type": "string", 
+                    "example": "https://acme.vmwareidentity.com/SAAS/auth/oauth2/authorize", 
+                    "description": "URL of the OAuth 2.0 authorization endpoint"
+                }, 
+                "issuer": {
+                    "type": "string", 
+                    "example": "https://acme.vmwareidentity.com/SAAS/auth", 
+                    "description": "the identifier of the token's issuer. This is identical to the 'iss' Claim value in ID Tokens"
+                }
+            }, 
+            "description": "The OpenID configuration document as defined by the specification: http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata"
+        }, 
         "Name": {
             "type": "object", 
             "properties": {
@@ -1468,6 +1802,45 @@
                     "type": "array"
                 }
             }
+        }, 
+        "RoleResource": {
+            "type": "object", 
+            "properties": {
+                "displayName": {
+                    "type": "string", 
+                    "example": "Administrator", 
+                    "description": "The display name for this role"
+                }, 
+                "description": {
+                    "type": "string", 
+                    "example": "read-only admin with limited access to file system", 
+                    "description": "The description for this role"
+                }, 
+                "scimObject": {
+                    "$ref": "#/definitions/SCIMObject"
+                }, 
+                "meta": {
+                    "$ref": "#/definitions/Meta"
+                }, 
+                "externalId": {
+                    "type": "string"
+                }, 
+                "members": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array", 
+                    "example": "[{\"value\": \"user1\",\"type\": \"User\"},{\"value\": \"user2\",\"type\": \"User\"}]", 
+                    "description": "The set of users or groups that have been assigned to this role or null if none"
+                }, 
+                "id": {
+                    "type": "string"
+                }, 
+                "resourceDescriptor": {
+                    "$ref": "#/definitions/ResourceDescriptor"
+                }
+            }, 
+            "description": "The SCIM Role resource object. Role resource is an extension to the \"roles\" attribute which is loosely defined in the SCIM Core Schema; see https://tools.ietf.org/html/rfc7643"
         }, 
         "LinkParams": {
             "type": "object"
