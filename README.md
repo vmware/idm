@@ -2,6 +2,12 @@
 
 Identity Manager is an Identity as a Service (IDaaS) offering, providing application provisioning, self-service catalog, conditional access controls and Single Sign-On (SSO) for SaaS, web, cloud and native mobile applications.
 
+## Overview
+
+If you don't know where to start, read the introduction on existing protocols to achieve Single-Sign On with your application:
+
+* [Choosing the right authentication protocol](https://github.com/vmware/idm/wiki/Choosing-The-Right-Auth)
+
 ## How-To Guides
 
 The wiki contains a lot of documentation to help you achieve your task. Whether you want to have end-users login to your web application or mobile application, or have your service be able to call VMware Identity Manager API, read through the following guides:
