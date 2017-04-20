@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build 2a7b745497da009de91c7deb40abb1f778ce3bac", 
+        "version": "Build 14ad3c5e304bd9a1f12743705fbf74d1cf500ab8", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -429,6 +429,42 @@
             }
         }, 
         "/SAAS/jersey/manager/api/oauth2clients": {
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientTypeInfo"
+                        }
+                    }, 
+                    "500": {
+                        "description": "If an unexpected error occurred or if client id already exists"
+                    }, 
+                    "400": {
+                        "description": "Invalid provided OAuth2 client information. Could be unpermitted characters in client id, invalid scope string, redirect uri missing or not in a url format in an authorization_code grant client, invalid grant type etc."
+                    }
+                }, 
+                "description": "This endpoint is used to define a new OAuth2 Client on VMware Identity Manager. An OAuth2 Client can be a Service Client('client credentials' OAuth2 grant type), or a User Client('authorization_code' or 'password' OAuth2 grant types). This definition will enable a service or its users to authenticate to VMware Identity Manager using the OAuth2 protocol.", 
+                "produces": [
+                    "application/vnd.vmware.horizon.manager.oauth2client+json"
+                ], 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "summary": "Create a new OAuth 2.0 client", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/vnd.vmware.horizon.manager.oauth2client+json"
+                ], 
+                "operationId": "post-createGenericOAuth2Client"
+            }, 
             "get": {
                 "responses": {
                     "200": {
@@ -937,8 +973,14 @@
                             "$ref": "#/definitions/OAuth2ClientActivationDetails"
                         }
                     }, 
+                    "404": {
+                        "description": "Activation failed, organization not found."
+                    }, 
                     "500": {
-                        "description": "The activation code is invalid or not specified."
+                        "description": "Activation failed, unknown error."
+                    }, 
+                    "400": {
+                        "description": "Activation failed, activation code is invalid or not specified."
                     }
                 }, 
                 "parameters": [
@@ -959,6 +1001,136 @@
                 "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.", 
                 "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.", 
                 "operationId": "post-activateOauth2Client"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/oauth2clients/{id}": {
+            "put": {
+                "responses": {
+                    "201": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientTypeInfo"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If oauth2client id is not found"
+                    }, 
+                    "500": {
+                        "description": "When changing the existing client ID is attempted or if an unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "If the provided client information is malformed"
+                    }
+                }, 
+                "description": "This endpoint is used to update information of an existing client, using a client id. Renaming the client (update client id) is not supported; To rename a client, it needs to be deleted first and then re-created", 
+                "parameters": [
+                    {
+                        "description": "the id of the oauth2client to be updated", 
+                        "required": true, 
+                        "x-example": "auth_grant_oauthclient1", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "produces": [
+                    "application/vnd.vmware.horizon.manager.oauth2client+json"
+                ], 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "summary": "Update an existing OAuth 2.0 client", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "consumes": [
+                    "application/vnd.vmware.horizon.manager.oauth2client+json"
+                ], 
+                "operationId": "put-updateOAuth2Client"
+            }, 
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "given client does not exist"
+                    }, 
+                    "204": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientTypeInfo"
+                        }
+                    }
+                }, 
+                "parameters": [
+                    {
+                        "description": "the id of the OAuth2 client to be deleted", 
+                        "required": true, 
+                        "x-example": "auth_grant_oauthclient1", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "description": "This endpoint is used to delete an existing client. Once deleted, the client information, its associated suite tokens, activation tokens, authorization codes, access tokens and refresh tokens will be lost. The operation cannot be undone", 
+                "summary": "Delete an OAuth 2.0 client", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "delete-deleteOAuth2Client"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/OAuth2ClientTypeInfo"
+                        }
+                    }, 
+                    "404": {
+                        "description": "If the OAuth2 client id is null or not found"
+                    }
+                }, 
+                "description": "This endpoint is used to get full details of a registered OAuth 2.0 Client on VMware Identity Manager", 
+                "parameters": [
+                    {
+                        "description": "the id of the oauth2client to retrieve", 
+                        "required": true, 
+                        "x-example": "auth_grant_oauthclient1", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "produces": [
+                    "application/vnd.vmware.horizon.manager.oauth2client+json", 
+                    "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json", 
+                    "application/vnd.vmware.horizon.manager.classicoauth2client+json"
+                ], 
+                "tags": [
+                    "admin", 
+                    "oauth2"
+                ], 
+                "summary": "View an existing OAuth 2.0 client", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getOAuth2Client"
             }
         }, 
         "/SAAS/jersey/manager/api/scim/Groups": {
@@ -1887,6 +2059,124 @@
                     "$ref": "#/definitions/LinkParams"
                 }
             }
+        }, 
+        "OAuth2ClientTypeInfo": {
+            "required": [
+                "authGrantTypes", 
+                "clientId", 
+                "scope"
+            ], 
+            "type": "object", 
+            "properties": {
+                "accessTokenTTL": {
+                    "position": 8, 
+                    "description": "How long in minutes new access tokens issued to this client should live", 
+                    "type": "integer", 
+                    "example": 10080, 
+                    "format": "int32"
+                }, 
+                "tokenType": {
+                    "position": 6, 
+                    "enum": [
+                        "Bearer"
+                    ], 
+                    "type": "string", 
+                    "example": "Bearer", 
+                    "description": "type of the tokens that can be requested"
+                }, 
+                "strData": {
+                    "type": "string", 
+                    "example": "1.1.1.1:8080", 
+                    "description": "General purpose data bucket for storing additional data for a client, such as agent ip and port"
+                }, 
+                "rememberAs": {
+                    "position": 10, 
+                    "type": "string", 
+                    "example": "my application client credentials oauth2 client", 
+                    "description": "A friendly name this native app/device is remembered as. Set by the admin"
+                }, 
+                "tokenLength": {
+                    "position": 7, 
+                    "description": "The length of the refresh token to be returned in bytes (only applicable if authGrantTypes includes \"refresh_token\"). Currently the refresh token length is constant and this value is ignored.", 
+                    "type": "integer", 
+                    "example": 32, 
+                    "format": "int32"
+                }, 
+                "clientId": {
+                    "position": 1, 
+                    "type": "string", 
+                    "example": "my-auth-grant-client1", 
+                    "description": "The OAuth 2.0 Client identifier that the client uses to identify itself during the OAuth2 exchanges. The client ID must contain only alphanumeric (A-Z, a-z, 0-9), period (.), underscore (_), hyphen (-) and at sign (@) characters"
+                }, 
+                "refreshTokenTTL": {
+                    "position": 9, 
+                    "description": " How long in minutes new refresh tokens issued to this client should live (only applicable if authGrantTypes includes \"refresh_token\")", 
+                    "type": "integer", 
+                    "example": 525600, 
+                    "format": "int32"
+                }, 
+                "internalSystemClient": {
+                    "default": false, 
+                    "type": "boolean", 
+                    "example": false, 
+                    "description": "When set to true, OAuth2 Client will become undeletable from the VMware Identity Admin UI. Default is 'false'"
+                }, 
+                "secret": {
+                    "position": 2, 
+                    "type": "string", 
+                    "example": "my-auth-grant-client1-secret", 
+                    "description": "The OAuth 2.0 Client secret (a string provided by an admin or a VMware Identity Manager auto-generated string). If secret string not provided, an auto-generated secret will be returned. Secret field is mandatory in Authorization Code and Client Credentials Grant flows. If the secret field is omitted or left blank in Resource Owner grant flow, no secret will be required to authenticate the client"
+                }, 
+                "displayUserGrant": {
+                    "default": false, 
+                    "type": "boolean", 
+                    "example": false, 
+                    "description": "Indicates whether to display grant page to user or not. If the value is set to false, then access is granted to clients according to org policy without asking user. Default is 'true'"
+                }, 
+                "_links": {
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Link"
+                    }, 
+                    "readOnly": true, 
+                    "type": "object"
+                }, 
+                "inheritanceAllowed": {
+                    "default": false, 
+                    "type": "boolean", 
+                    "example": true, 
+                    "description": "If set to 'true' will allow the child tenants to look up clientId and secret at the root level. Default is 'false'"
+                }, 
+                "scope": {
+                    "position": 3, 
+                    "type": "string", 
+                    "example": "admin user openid profile email", 
+                    "description": "list of space-delimited access request scopes that are allowed by this OAuth 2.0 Client. Available scope options are: admin- Admin Level Access, user - User Level Access, profile - Access to User's profile (FirstName//LastName//Display Name//Image), email - Access to User's Email, uuid  - Access for a specific application/resource which matches this UUID"
+                }, 
+                "activationToken": {
+                    "type": "string", 
+                    "example": "eyJvdGEiOiIzOkhyYUwzQ2hTWGJKd3hzSnNCdkc2cjM0eDZDRng4blFkIiwidXJsIjoiaHR0cHM6Ly9ndy1hYS5ocy50cmNpbnQuY29tLyIsInRpZCI6Imd3LWFhIn0=", 
+                    "description": "A one time token that can be used to securely activate an application with the client id and secret. Generating an activation token is currently not supported through this API"
+                }, 
+                "resourceUuid": {
+                    "description": "UUID of a VMware Identity application. Only users who are entitled to this application will be able to authenticate via this client.", 
+                    "type": "string", 
+                    "example": "9e70bee8-3a55-4413-8418-454e7278093e", 
+                    "format": "uuid"
+                }, 
+                "authGrantTypes": {
+                    "position": 4, 
+                    "type": "string", 
+                    "example": "authorization_code client_credentials password", 
+                    "description": "list of space-delimited Oauth 2.0 Access Grant Types that are enabled in this OAuth 2.0 Client. Available Grant types are: authorization_code client_credentials password"
+                }, 
+                "redirectUri": {
+                    "position": 5, 
+                    "type": "string", 
+                    "example": "https://*.hostname1.com/auth/* https://*.hostname2.com/auth/*", 
+                    "description": "A space/comma separated list of absolute URIs of application endpoints that are allowed to receive the authorization code and access token. The redirect_uri sent by the application as part of the Authorization Code Grant Oauth 2.0 flow is verified against this list. A Wildcard can be substituted for any string to skip the check for a particular URL section"
+                }
+            }, 
+            "description": "OAuth 2.0 Client Settings"
         }, 
         "Address": {
             "type": "object", 
