@@ -24,7 +24,8 @@ Sample applications are provided - as is - to demonstrate how to integrate your 
 
  * [Android application using the AppAuth library](https://github.com/vmware/idm/tree/master/samples/DynamicRegistrationAppAuthDemo-Android)
  * [SpringBoot web application using OAuth2.0](https://github.com/vmware/idm/tree/master/samples/webapp-spring-boot-oauth2)
- * [SpringBoot web application acting as a resource server using OAuth2.0] (https://github.com/vmware/idm/tree/master/samples/webapp-spring-boot-oauth2-resource-server)
+ * [SpringBoot web application acting as a resource server using OAuth2.0](https://github.com/vmware/idm/tree/master/samples/webapp-spring-boot-oauth2-resource-server)
+ * [SpringBoot web application using SAML2](https://github.com/vmware/idm/tree/master/samples/webapp-spring-boot-saml2)
 
 ## Resources
 * [Reference API File](https://github.com/vmware/idm/blob/master/apidocs/swagger.json)
