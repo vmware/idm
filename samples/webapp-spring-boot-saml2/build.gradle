@@ -1,0 +1,24 @@
+plugins {
+    id "java"
+    id 'org.springframework.boot' version '1.5.3.RELEASE'
+}
+description = "Spring Boot SAML v2 sample webapp"
+
+repositories {
+    jcenter()
+}
+ext {
+    springSecuritySaml2Version = '1.0.2.RELEASE'
+}
+
+dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile "org.springframework.boot:spring-boot-starter-thymeleaf"
+
+    // SAML2
+    compile "org.springframework.security.extensions:spring-security-saml2-core:$springSecuritySaml2Version"
+
+    // tests
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
