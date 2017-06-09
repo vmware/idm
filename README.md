@@ -16,6 +16,7 @@ The wiki contains a lot of documentation to help you achieve your task. Whether 
 * [Integrating your mobile app with OAuth2.0 (end users log in)](https://github.com/vmware/idm/wiki/Single-sign-on-for-Mobile)
 * [Integrating your backend app with OAuth2.0 (service to service)](https://github.com/vmware/idm/wiki/Integrating-Client-Credentials-app-with-OAuth2)
 * [Validate the tokens](https://github.com/vmware/idm/wiki/Validating-Access-or-ID-Token)
+* [Managing USers and Groups using SCIM API](https://github.com/vmware/idm/wiki/SCIM-guide)
 
 
 ## Samples
