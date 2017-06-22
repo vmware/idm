@@ -1,6 +1,6 @@
 {
     "info": {
-        "version": "Build 14ad3c5e304bd9a1f12743705fbf74d1cf500ab8", 
+        "version": "Build 2754cc490f69fb590578284d241dbd09b6e9a26f", 
         "contact": {
             "url": "http://www.vmware.com/company/contact_sales.html"
         }, 
@@ -106,7 +106,7 @@
                         "name": "attributes"
                     }, 
                     {
-                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','gt','ge','lt' and 'le' are currently supported as operators", 
                         "required": false, 
                         "x-example": "userName co \"j\"", 
                         "in": "query", 
@@ -258,137 +258,32 @@
                 "operationId": "get-doOAuth2Authorize"
             }
         }, 
-        "/SAAS/jersey/manager/api/scim/Users/{id}": {
-            "patch": {
-                "responses": {
-                    "403": {
-                        "description": "The user is not a local user and can not be updated"
-                    }, 
-                    "500": {
-                        "description": "An unexpected error occurred"
-                    }, 
-                    "400": {
-                        "description": "The supplied JSON is incorrect"
-                    }
-                }, 
-                "description": "Updates user's information. The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.", 
-                "parameters": [
-                    {
-                        "description": "the id of the user to update", 
-                        "required": true, 
-                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
-                        "in": "path", 
-                        "type": "string", 
-                        "name": "id"
-                    }, 
-                    {
-                        "description": "the user resource updated information as a JSON string", 
-                        "required": true, 
-                        "x-examples": {
-                            "default": "{ \"name\": { \"givenName\": \"Updated given name\" }}"
-                        }, 
-                        "name": "body", 
-                        "in": "body", 
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ], 
-                "produces": [
-                    "application/json"
-                ], 
-                "tags": [
-                    "scim", 
-                    "admin"
-                ], 
-                "summary": "Update a user found by id", 
-                "security": [
-                    {
-                        "admin_oauth2": [
-                            "admin"
-                        ]
-                    }
-                ], 
-                "operationId": "patch-patchUser"
-            }, 
-            "delete": {
-                "responses": {
-                    "404": {
-                        "description": "The specified user does not exist"
-                    }, 
-                    "500": {
-                        "description": "An unexpected error occurred"
-                    }
-                }, 
-                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
-                "parameters": [
-                    {
-                        "description": "the id of the user to delete", 
-                        "required": true, 
-                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
-                        "in": "path", 
-                        "type": "string", 
-                        "name": "id"
-                    }
-                ], 
-                "produces": [
-                    "application/json"
-                ], 
-                "tags": [
-                    "scim", 
-                    "admin"
-                ], 
-                "summary": "Delete a user found by id", 
-                "security": [
-                    {
-                        "admin_oauth2": [
-                            "admin"
-                        ]
-                    }
-                ], 
-                "operationId": "delete-deleteUser"
-            }, 
-            "get": {
+        "/SAAS/jersey/manager/api/scim/Users/.search": {
+            "post": {
                 "responses": {
                     "200": {
                         "description": "successful operation", 
                         "schema": {
-                            "$ref": "#/definitions/UserResource"
+                            "$ref": "#/definitions/Resources"
                         }
+                    }, 
+                    "400": {
+                        "description": "The specified search request is invalid"
                     }
                 }, 
-                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
+                "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nIt serves the same function as the GET /scim/Users API but using a POST to allow an unlimited request size.", 
                 "parameters": [
                     {
-                        "description": "the id of the user to retrieve", 
+                        "description": "the search request", 
                         "required": true, 
-                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
-                        "in": "path", 
-                        "type": "string", 
-                        "name": "id"
-                    }, 
-                    {
-                        "description": "when specified, the returned user will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
-                        "required": false, 
-                        "type": "string", 
-                        "name": "attributes", 
-                        "in": "query"
-                    }, 
-                    {
-                        "description": "the directory identifier. This identifier will be used to retrieve local directory's user attribute definitions (if any). If not specified, the user attribute definitions defined for the tenant will be used.", 
-                        "required": false, 
-                        "x-example": "ca6c160e-5bb9-422c-8d71-777a90241dea", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "directoryUuid"
-                    }, 
-                    {
-                        "description": "custom schema extension types for which user schema attributes needs to be included", 
-                        "required": false, 
-                        "x-example": "my-custom-schema", 
-                        "in": "query", 
-                        "type": "string", 
-                        "name": "customSchemaExtensionTypes"
+                        "x-examples": {
+                            "default": "{\n\t\"filter\" : \"name.givenName sw \\\"jo\\\"\",\n\t\"attributes\" : \"userName,name.familyName,emails\",\n\t\"sortBy\" : \"name.familyName\"\n}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "$ref": "#/definitions/SearchRequest"
+                        }
                     }
                 ], 
                 "produces": [
@@ -398,7 +293,7 @@
                     "scim", 
                     "admin"
                 ], 
-                "summary": "Get a user by id", 
+                "summary": "Find all users or only users matching a supplied filter", 
                 "security": [
                     {
                         "admin_oauth2": [
@@ -406,7 +301,10 @@
                         ]
                     }
                 ], 
-                "operationId": "get-getUser"
+                "consumes": [
+                    "application/json"
+                ], 
+                "operationId": "post-findUsers"
             }
         }, 
         "/SAAS/auth/.well-known/openid-configuration": {
@@ -491,6 +389,47 @@
                     }
                 ], 
                 "operationId": "get-getOAuth2ClientSummaryList"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/search/users/autocomplete": {
+            "get": {
+                "responses": {
+                    "503": {
+                        "description": "People search is not enabled"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "The specified \"startTerm\" is invalid"
+                    }
+                }, 
+                "description": "The users will be searched on name, display name, first name, last name, email", 
+                "parameters": [
+                    {
+                        "required": true, 
+                        "type": "string", 
+                        "name": "startTerm", 
+                        "in": "query"
+                    }, 
+                    {
+                        "name": "count", 
+                        "format": "int32", 
+                        "default": 100, 
+                        "required": false, 
+                        "in": "query", 
+                        "type": "integer"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "user"
+                ], 
+                "summary": "Find all users matching a supplied search ", 
+                "operationId": "get-findUsers"
             }
         }, 
         "/SAAS/jersey/manager/api/scim/Roles/{id}": {
@@ -657,6 +596,157 @@
                 "description": "This endpoint allows applications to validate the access token issued by VMware Identity Manager, and to retrieve the public key used to sign the token.", 
                 "summary": "Retrieve the public key to validate a token or check the given access token", 
                 "operationId": "get-getTokenAttribute"
+            }
+        }, 
+        "/SAAS/jersey/manager/api/scim/Users/{id}": {
+            "patch": {
+                "responses": {
+                    "403": {
+                        "description": "The user is not a local user and can not be updated"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }, 
+                    "400": {
+                        "description": "The supplied JSON is incorrect"
+                    }
+                }, 
+                "description": "Updates user's information. The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to update", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "the user resource updated information as a JSON string", 
+                        "required": true, 
+                        "x-examples": {
+                            "default": "{ \"name\": { \"givenName\": \"Updated given name\" }}"
+                        }, 
+                        "name": "body", 
+                        "in": "body", 
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Update a user found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "patch-patchUser"
+            }, 
+            "delete": {
+                "responses": {
+                    "404": {
+                        "description": "The specified user does not exist"
+                    }, 
+                    "500": {
+                        "description": "An unexpected error occurred"
+                    }
+                }, 
+                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to delete", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Delete a user found by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "delete-deleteUser"
+            }, 
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "successful operation", 
+                        "schema": {
+                            "$ref": "#/definitions/UserResource"
+                        }
+                    }
+                }, 
+                "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...", 
+                "parameters": [
+                    {
+                        "description": "the id of the user to retrieve", 
+                        "required": true, 
+                        "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394", 
+                        "in": "path", 
+                        "type": "string", 
+                        "name": "id"
+                    }, 
+                    {
+                        "description": "when specified, the returned user will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested", 
+                        "required": false, 
+                        "type": "string", 
+                        "name": "attributes", 
+                        "in": "query"
+                    }, 
+                    {
+                        "description": "the directory identifier. This identifier will be used to retrieve local directory's user attribute definitions (if any). If not specified, the user attribute definitions defined for the tenant will be used.", 
+                        "required": false, 
+                        "x-example": "ca6c160e-5bb9-422c-8d71-777a90241dea", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "directoryUuid"
+                    }, 
+                    {
+                        "description": "custom schema extension types for which user schema attributes needs to be included", 
+                        "required": false, 
+                        "x-example": "my-custom-schema", 
+                        "in": "query", 
+                        "type": "string", 
+                        "name": "customSchemaExtensionTypes"
+                    }
+                ], 
+                "produces": [
+                    "application/json"
+                ], 
+                "tags": [
+                    "scim", 
+                    "admin"
+                ], 
+                "summary": "Get a user by id", 
+                "security": [
+                    {
+                        "admin_oauth2": [
+                            "admin"
+                        ]
+                    }
+                ], 
+                "operationId": "get-getUser"
             }
         }, 
         "/SAAS/jersey/manager/api/scim/Groups/{id}": {
@@ -920,7 +1010,7 @@
                         "name": "attributes"
                     }, 
                     {
-                        "description": "when specified, only roles matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "description": "when specified, only roles matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','gt','ge','lt' and 'le' are currently supported as operators", 
                         "required": false, 
                         "x-example": "displayName co \"User\"", 
                         "in": "query", 
@@ -1218,7 +1308,7 @@
                         "name": "attributes"
                     }, 
                     {
-                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators", 
+                        "description": "when specified, only users matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','gt','ge','lt' and 'le' are currently supported as operators", 
                         "required": false, 
                         "x-example": "displayName co \"test\"", 
                         "in": "query", 
@@ -1294,7 +1384,7 @@
                         "description": "The specified search request is invalid"
                     }
                 }, 
-                "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.This serves the same function as the GET /scim/Groups API but using a POST method so that the length of the request is not limited.", 
+                "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nThis serves the same function as the GET /scim/Groups API but using a POST method so that the length of the request is not limited.", 
                 "parameters": [
                     {
                         "description": "the search request", 
@@ -1509,6 +1599,9 @@
         }, 
         {
             "name": "scim"
+        }, 
+        {
+            "name": "user"
         }
     ], 
     "basePath": "/", 
@@ -1739,10 +1832,11 @@
                     "example": "PROVISIONED", 
                     "description": "The user internal type. Possible values are: PROVISIONED, LOCAL, OPERATOR, SERVICE and JIT "
                 }, 
-                "userPrincipalName": {
-                    "type": "string", 
-                    "example": "user1@acme.com", 
-                    "description": "The user principal name if available"
+                "phoneNumbers": {
+                    "items": {
+                        "$ref": "#/definitions/EntryString"
+                    }, 
+                    "type": "array"
                 }, 
                 "userType": {
                     "type": "string"
@@ -1752,12 +1846,6 @@
                 }, 
                 "meta": {
                     "$ref": "#/definitions/Meta"
-                }, 
-                "groups": {
-                    "items": {
-                        "$ref": "#/definitions/EntryString"
-                    }, 
-                    "type": "array"
                 }, 
                 "id": {
                     "type": "string"
@@ -1806,6 +1894,11 @@
                 "nickName": {
                     "type": "string"
                 }, 
+                "userPrincipalName": {
+                    "type": "string", 
+                    "example": "user1@acme.com", 
+                    "description": "The user principal name if available"
+                }, 
                 "userStoreUuid": {
                     "type": "string", 
                     "example": "19175b6d-a656-451a-9d25-b62e12d90a24", 
@@ -1822,7 +1915,7 @@
                     "example": "100007", 
                     "description": "The user employee number if available: a string identifier, typically numeric or alphanumeric, assigned\n      to a person, typically based on order of hire or association with\n      an organization."
                 }, 
-                "phoneNumbers": {
+                "groups": {
                     "items": {
                         "$ref": "#/definitions/EntryString"
                     }, 
@@ -1882,8 +1975,8 @@
                 }, 
                 "filter": {
                     "type": "string", 
-                    "example": "displayName co \"test\"", 
-                    "description": "The search filter. When specified, only resources matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','pr','gt','ge','lt' and 'le' are currently supported as operators"
+                    "example": "domain co \"test.com\"", 
+                    "description": "The search filter. When specified, only resources matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','gt','ge','lt' and 'le' are currently supported as operators"
                 }, 
                 "startIndex": {
                     "description": "Offset of the first resource to return in the list of found resources. This is used for pagination. Default is 0", 
@@ -1898,12 +1991,12 @@
                 }, 
                 "attributes": {
                     "type": "string", 
-                    "example": "displayName", 
+                    "example": "distinguishedName", 
                     "description": "The attributes to be returned. When specified, the returned resource will contain the minimal set of resource attributes plus the attributes or sub-attributes explicitly requested. "
                 }, 
                 "sortBy": {
                     "type": "string", 
-                    "example": "displayName", 
+                    "example": "distinguishedName", 
                     "description": "The attribute to use to sort the found resource"
                 }
             }, 
