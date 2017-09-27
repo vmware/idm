@@ -1,0 +1,6 @@
+language: java
+env:
+  - SAMPLE_DIR=samples/DynamicRegistrationAppAuthDemo-Android
+  - SAMPLE_DIR=samples/webapp-sping-boot-oauth2
+
+script: cd $SAMPLE_DIR && ./gradlew build
