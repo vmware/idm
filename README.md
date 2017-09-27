@@ -20,7 +20,7 @@ The wiki contains a lot of documentation to help you achieve your task. Whether 
 
 
 ## Samples
-
+[![Build Status](https://travis-ci.org/vmware/idm.svg?branch=master)](https://travis-ci.org/vmware/idm/)
 Sample applications are provided - as is - to demonstrate how to integrate your application with VMware Identity Manager:
 
  * [Android application using the AppAuth library](https://github.com/vmware/idm/tree/master/samples/DynamicRegistrationAppAuthDemo-Android)
