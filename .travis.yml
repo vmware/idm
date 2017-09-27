@@ -1,6 +1,5 @@
 language: java
 env:
-  - SAMPLE_DIR=samples/DynamicRegistrationAppAuthDemo-Android
   - SAMPLE_DIR=samples/webapp-spring-boot-oauth2
   - SAMPLE_DIR=samples/webapp-spring-boot-oauth2-resource-server
   - SAMPLE_DIR=samples/webapp-spring-boot-saml2
