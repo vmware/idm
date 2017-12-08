@@ -42,6 +42,15 @@
             "name": "attributes"
           },
           {
+            "description": "whether or not to send email to set the password. This parameter is used only if the password is not set in the JSON body. If set to 'false', the returned user resource will contain an OTA link to set the password. The default is 'true'",
+            "default": true,
+            "required": false,
+            "x-example": "false",
+            "in": "query",
+            "type": "boolean",
+            "name": "sendMail"
+          },
+          {
             "description": "the user resource to be created as a JSON string",
             "required": true,
             "x-examples": {
@@ -50,17 +59,8 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/SdkUserResource"
             }
-          },
-          {
-            "description": "whether or not to send email to set the password. This parameter is used only if the password is not set in the JSON body. If set to 'false', the returned user resource will contain an OTA link to set the password. The default is 'true'",
-            "default": true,
-            "required": false,
-            "x-example": "false",
-            "in": "query",
-            "type": "boolean",
-            "name": "sendMail"
           }
         ],
         "produces": [
@@ -365,10 +365,10 @@
             "description": "Server error while patching SCIM role"
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "No authentication provided"
           },
           "400": {
-            "description": "One or more of the specified \"attributes\" parameter values is invalid"
+            "description": "If the supplied serialized JSON role is malformed"
           }
         },
         "description": "Updates role's information. Commonly used to assign users to this role. The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=...\nPatch operation allows to send in the request the attributes that need to be changed only.",
@@ -382,12 +382,16 @@
             "name": "id"
           },
           {
-            "description": "the attributes or sub-attributes to update. schemas attribute must be declared.",
+            "description": "the role resource to be updated as a JSON string",
             "required": true,
-            "x-example": "{\"schemas\": [\"urn:scim:schemas:core:1.0\"],\"members\": [{\"value\": \"user1\",\"type\": \"User\"}]}",
-            "in": "query",
-            "type": "string",
-            "name": "attributes"
+            "x-examples": {
+              "default": "{\n    \"schemas\": [\n        \"urn:scim:schemas:core:1.0\"\n        ],\n    \"members\": \n        {\n            \"value\": \"8142e325-18b0-4fc3-af52-3f650f7dacf8\"\n            \"type\" : \"User\"        }\n }"
+            },
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SdkRoleResource"
+            }
           }
         ],
         "produces": [
@@ -400,7 +404,7 @@
         "summary": "Update a role found by id",
         "security": [
           {
-            "admin_oauth2": [
+            "oauth2": [
               "admin"
             ]
           }
@@ -415,7 +419,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/RoleResource"
+              "$ref": "#/definitions/SdkRoleResource"
             }
           },
           "404": {
@@ -457,7 +461,7 @@
         "summary": "Get a role by id",
         "security": [
           {
-            "admin_oauth2": [
+            "oauth2": [
               "admin"
             ]
           }
@@ -500,7 +504,7 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/SdkUserResource"
             }
           }
         ],
@@ -2217,6 +2221,52 @@
       },
       "description": "The SCIM resource object that represents a summary description of a user instead of the full SCIM UserResource"
     },
+    "SdkRoleResource": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "example": "Administrator",
+          "description": "The display name for this role"
+        },
+        "resourceDescriptor": {
+          "$ref": "#/definitions/ResourceDescriptor"
+        },
+        "urn:scim:schemas:extension:workspace:1.0": {
+          "description": "The role's attributes specific to the 'urn:scim:schemas:extension:workspace:1.0' schema.",
+          "$ref": "#/definitions/WorkspaceSchemaUserAttributes"
+        },
+        "scimObject": {
+          "$ref": "#/definitions/SCIMObject"
+        },
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "$ref": "#/definitions/EntryString"
+          },
+          "type": "array",
+          "example": "[{\"value\": \"user1\",\"type\": \"User\"},{\"value\": \"user2\",\"type\": \"User\"}]",
+          "description": "The set of users or groups that have been assigned to this role or null if none"
+        },
+        "id": {
+          "type": "string"
+        },
+        "schemas": {
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "The set of schemas currently contributing attributes to this role"
+        }
+      },
+      "description": "The SCIM Role resource object. Role resource is an extension to the \"roles\" attribute which is loosely defined in the SCIM Core Schema; see https://tools.ietf.org/html/rfc7643"
+    },
     "Name": {
       "type": "object",
       "properties": {
@@ -2436,6 +2486,30 @@
         "Resources": {
           "items": {
             "$ref": "#/definitions/RoleResource"
+          },
+          "type": "array",
+          "description": "The list of roles."
+        }
+      }
+    },
+    "ResourcesOfRoleResource": {
+      "type": "object",
+      "properties": {
+        "itemsPerPage": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "startIndex": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "totalResults": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "Resources": {
+          "items": {
+            "$ref": "#/definitions/SdkRoleResource"
           },
           "type": "array",
           "description": "The list of roles."
