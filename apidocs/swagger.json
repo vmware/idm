@@ -2485,30 +2485,6 @@
         },
         "Resources": {
           "items": {
-            "$ref": "#/definitions/RoleResource"
-          },
-          "type": "array",
-          "description": "The list of roles."
-        }
-      }
-    },
-    "ResourcesOfRoleResource": {
-      "type": "object",
-      "properties": {
-        "itemsPerPage": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "startIndex": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalResults": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "Resources": {
-          "items": {
             "$ref": "#/definitions/SdkRoleResource"
           },
           "type": "array",
