@@ -42,6 +42,7 @@ public class VMwareValidateTokenServices implements ResourceServerTokenServices 
 
     private static final String ISSUER_KEY = "iss";
     private static final String ISSUED_AT_KEY = "iat";
+    public static final long ALLOWED_SKEW_IN_MS = 1000;
 
     private URI validateTokenUrl;
     private boolean validateLocally = true;
@@ -110,12 +111,12 @@ public class VMwareValidateTokenServices implements ResourceServerTokenServices 
             throw new InvalidTokenException(String.format("Invalid issuer: '%s', expected: '%s'", issuer, expectedIssuer));
         }
 
-        // check iat
+        // check iat. Allow for a time skew between the different parties
         Object issuedAt = map.get(ISSUED_AT_KEY);
         if (issuedAt == null || !(issuedAt instanceof Integer)) {
             throw new InvalidTokenException("Missing or invalid 'iat' key, expecting a valid timestamp value.");
         }
-        if ((Integer) issuedAt > now) {
+        if ((Integer) issuedAt > now + ALLOWED_SKEW_IN_MS) {
             throw new InvalidTokenException("Token has been issued in the future: " + issuedAt);
         }
 

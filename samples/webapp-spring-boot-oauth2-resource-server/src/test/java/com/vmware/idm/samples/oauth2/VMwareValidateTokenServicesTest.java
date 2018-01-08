@@ -184,6 +184,8 @@ public class VMwareValidateTokenServicesTest {
     @Test
     public void testLoadAuthenticationFailsIfIssuedAtIsInTheFuture() throws Exception {
         DefaultOAuth2AccessToken token = aValidOAuth2AccessToken();
+
+        cal.setTime(new Date());
         cal.add(Calendar.HOUR_OF_DAY, 2); // add 2 hours
 
         token.getAdditionalInformation().put("iat", (int) (cal.getTime().getTime() / 1000));
@@ -191,6 +193,22 @@ public class VMwareValidateTokenServicesTest {
         willSuccessfullyDecodeAccessToken(token);
         expectInvalidToken("Token has been issued in the future:");
         tokenServices.loadAuthentication(AN_ACCESS_TOKEN_STRING);
+    }
+
+    @Test
+    public void testLoadAuthenticationSucceedsIfIssuedAtTimeIsWithinTheAllowedSkew() throws Exception {
+        DefaultOAuth2AccessToken token = aValidOAuth2AccessToken();
+
+        cal.setTime(new Date());
+        // hopefully the time it takes to execute is lower than the allowed skew time
+        cal.add(Calendar.MILLISECOND, (int) (VMwareValidateTokenServices.ALLOWED_SKEW_IN_MS - 1));
+        token.getAdditionalInformation().put("iat", (int) (cal.getTime().getTime() / 1000));
+
+        willSuccessfullyDecodeAccessToken(token);
+        willSuccessfullyReadAuthInfo();
+
+        OAuth2Authentication auth = tokenServices.loadAuthentication(AN_ACCESS_TOKEN_STRING);
+        assertAuthIsValid(auth);
     }
 
     @Test
