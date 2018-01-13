@@ -820,12 +820,12 @@
             "description": "the group resource updated information as a JSON string",
             "required": true,
             "x-examples": {
-              "default": "{\n\t\"displayName\": \"updated-test-group\"\n}"
+              "default": "{ \"name\": { \"displayName\": \"updated group name\" }}"
             },
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/SdkGroupResource"
             }
           }
         ],
@@ -991,7 +991,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/Resources"
+              "$ref": "#/definitions/ResourcesOfGroupResource"
             }
           },
           "400": {
@@ -1490,7 +1490,7 @@
             "name": "body",
             "in": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/SdkGroupResource"
             }
           }
         ],
@@ -1948,6 +1948,14 @@
                 }, 
                 "id": {
                     "type": "string"
+                },
+                "schemas": {
+                    "uniqueItems": true,
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array",
+                    "description": "The set of schemas that are currently contributing attributes to this group"
                 }
             }, 
             "description": "The SCIM group resource object. It extends the standard SCIM group resource, see https://tools.ietf.org/html/rfc7643"
