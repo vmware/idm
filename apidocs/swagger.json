@@ -2624,12 +2624,15 @@
                     "type": "string", 
                     "example": "acme.com", 
                     "description": "The group user store identifier (userStoreUuid) if available. This is deprecated and will be replaced soon by the directory identifier"
-                }, 
-                "parents": {
-                    "type": "string", 
-                    "description": "The list of group parents if available. The groups can be nested and VMware Identity Manager will return the full hierarchy"
-                }, 
-                "compositionRulesV2": {
+                },
+              "parents": {
+                "items": {
+                  "$ref": "#/definitions/EntryString"
+                },
+                "type": "array",
+                "description": "The list of group parents if available. The groups can be nested and VMware Identity Manager will return the full hierarchy"
+              },
+              "compositionRulesV2": {
                     "type": "boolean", 
                     "example": false, 
                     "description": "The group composition rules version 2. Those rules are populated with relevant information when a dynamic group is created.It adds support for user uuid and group uuid"
