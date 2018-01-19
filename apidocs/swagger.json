@@ -1,15 +1,15 @@
 {
   "info": {
+    "title": "VMware Identity Manager",
     "version": "Build ede7619a82a790498f4ecca11a28bdfd547e64b8",
-    "contact": {
-      "url": "http://www.vmware.com/company/contact_sales.html"
-    },
     "description": "VMware Identity Manager REST API documentation.",
     "license": {
       "url": "http://www.vmware.com/download/eula/identity-manager-terms-of-service.html",
       "name": "VMware Identity Manager Terms of Service"
     },
-    "title": "VMware Identity Manager"
+    "contact": {
+      "url": "http://www.vmware.com/company/contact_sales.html"
+    }
   },
   "paths": {
     "/SAAS/jersey/manager/api/scim/Users": {
@@ -21,17 +21,16 @@
               "$ref": "#/definitions/SdkUserResource"
             }
           },
-          "500": {
-            "description": "An unexpected error occurred"
-          },
           "409": {
             "description": "A user with the same userName already exists"
+          },
+          "500": {
+            "description": "An unexpected error occurred"
           },
           "400": {
             "description": "The specified attributes are invalid or the userName of the user to be created is missing or invalid"
           }
         },
-        "description": "Creates a user in the system directory",
         "parameters": [
           {
             "description": "list of attributes to return, separated by comma. When specified, the returned created user will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
@@ -63,12 +62,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Create a local user",
         "security": [
@@ -78,7 +77,8 @@
             ]
           }
         ],
-        "operationId": "post-postUser"
+        "operationId": "post-postUser",
+        "description": "Creates a user in the system directory"
       },
       "get": {
         "responses": {
@@ -95,7 +95,6 @@
             "description": "The specified filter operation is invalid or the specified \"attributes\" are invalid"
           }
         },
-        "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15",
         "parameters": [
           {
             "description": "list of attributes to return, separated by comma. When specified, the retrieved user(s) will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
@@ -142,12 +141,12 @@
             "name": "sortBy"
           },
           {
+            "required": false,
+            "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\".",
             "enum": [
               "ascending",
               "descending"
             ],
-            "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\".",
-            "required": false,
             "x-example": "descending",
             "in": "query",
             "type": "string",
@@ -162,12 +161,12 @@
             "name": "customSchemaExtensionTypes"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Find all users or only users matching a supplied filter",
         "security": [
@@ -177,7 +176,8 @@
             ]
           }
         ],
-        "operationId": "get-getUsers"
+        "operationId": "get-getUsers",
+        "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15"
       }
     },
     "/SAAS/jersey/manager/api/scim/Users/.search": {
@@ -193,7 +193,6 @@
             "description": "The specified search request is invalid"
           }
         },
-        "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nIt serves the same function as the GET /scim/Users API but using a POST to allow an unlimited request size.",
         "parameters": [
           {
             "description": "the search request",
@@ -208,12 +207,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Find all users or only users matching a supplied filter",
         "security": [
@@ -223,54 +222,17 @@
             ]
           }
         ],
+        "operationId": "post-findUsers",
         "consumes": [
           "application/json"
         ],
-        "operationId": "post-findUsers"
-      }
-    },
-    "/SAAS/API/1.0/REST/oauth2/activate": {
-      "post": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/OAuth2ClientActivationDetails"
-            }
-          },
-          "404": {
-            "description": "Activation failed, organization not found."
-          },
-          "500": {
-            "description": "Activation failed, unknown error."
-          },
-          "400": {
-            "description": "Activation failed, activation code is invalid or not specified."
-          }
-        },
-        "parameters": [
-          {
-            "schema": {
-              "type": "string"
-            },
-            "description": "the activation code",
-            "required": true,
-            "name": "body",
-            "in": "body"
-          }
-        ],
-        "tags": [
-          "mobile",
-          "oauth2"
-        ],
-        "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.",
-        "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.",
-        "operationId": "post-activateOauth2Client"
+        "description": "Retrieve all users if no filter is specified, otherwise retrieve all the users matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nIt serves the same function as the GET /scim/Users API but using a POST to allow an unlimited request size."
       }
     },
     "/SAAS/auth/.well-known/openid-configuration": {
       "get": {
-        "operationId": "get-getOpenIDConfiguration",
+        "description": "This endpoint follows the specification defined at http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. It provides a mechanism for an OpenID Connect Relying Party to discover the End-User's OpenID Provider and obtain information needed to interact with it, including its OAuth 2.0 endpoint locations.",
+        "summary": "OpenID Connect discovery endpoint",
         "responses": {
           "200": {
             "description": "successful operation",
@@ -279,12 +241,11 @@
             }
           }
         },
-        "summary": "OpenID Connect discovery endpoint",
-        "description": "This endpoint follows the specification defined at http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata. It provides a mechanism for an OpenID Connect Relying Party to discover the End-User's OpenID Provider and obtain information needed to interact with it, including its OAuth 2.0 endpoint locations.",
         "tags": [
           "oauth2",
           "oidc"
-        ]
+        ],
+        "operationId": "get-getOpenIDConfiguration"
       }
     },
     "/SAAS/jersey/manager/api/oauth2clients": {
@@ -303,7 +264,6 @@
             "description": "Invalid provided OAuth2 client information. Could be unpermitted characters in client id, invalid scope string, redirect uri missing or not in a url format in an authorization_code grant client, invalid grant type etc."
           }
         },
-        "description": "This endpoint is used to define a new OAuth2 Client on VMware Identity Manager. An OAuth2 Client can be a Service Client('client credentials' OAuth2 grant type), or a User Client('authorization_code' or 'password' OAuth2 grant types). This definition will enable a service or its users to authenticate to VMware Identity Manager using the OAuth2 protocol.",
         "produces": [
           "application/vnd.vmware.horizon.manager.oauth2client+json"
         ],
@@ -319,27 +279,20 @@
             ]
           }
         ],
+        "operationId": "post-createGenericOAuth2Client",
         "consumes": [
           "application/vnd.vmware.horizon.manager.oauth2client+json"
         ],
-        "operationId": "post-createGenericOAuth2Client"
+        "description": "This endpoint is used to define a new OAuth2 Client on VMware Identity Manager. An OAuth2 Client can be a Service Client('client credentials' OAuth2 grant type), or a User Client('authorization_code' or 'password' OAuth2 grant types). This definition will enable a service or its users to authenticate to VMware Identity Manager using the OAuth2 protocol."
       },
       "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/OAuth2ClientSummaryList"
-            }
-          }
-        },
-        "produces": [
-          "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
-        ],
         "description": "This endpoint is used to read the list of OAuth 2.0 clients VMware Identity Manager has registered.",
         "tags": [
           "admin",
           "oauth2"
+        ],
+        "produces": [
+          "application/vnd.vmware.horizon.manager.oauth2clientsummarylist+json"
         ],
         "summary": "List existing OAuth 2.0 clients",
         "security": [
@@ -349,10 +302,72 @@
             ]
           }
         ],
-        "operationId": "get-getOAuth2ClientSummaryList"
+        "operationId": "get-getOAuth2ClientSummaryList",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OAuth2ClientSummaryList"
+            }
+          }
+        }
       }
     },
     "/SAAS/jersey/manager/api/scim/Roles/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SdkRoleResource"
+            }
+          },
+          "404": {
+            "description": "If role id is not found"
+          },
+          "500": {
+            "description": "An unexpected error occurred"
+          },
+          "400": {
+            "description": "One or more of the specified \"attributes\" parameter values is invalid"
+          }
+        },
+        "parameters": [
+          {
+            "description": "the id of the role to retrieve",
+            "required": true,
+            "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb",
+            "in": "path",
+            "type": "string",
+            "name": "id"
+          },
+          {
+            "description": "list of attributes to return, separated by comma. When specified, the retrieved role will only contain the minimal set of role attributes plus the attributes or sub-attributes explicitly requested, i.e. {urn}:{Attribute name}.{Sub-Attribute name}",
+            "required": false,
+            "x-example": "displayName,meta.version,urn:scim:schemas:extension:workspace:1.0:description,",
+            "in": "query",
+            "type": "string",
+            "name": "attributes"
+          }
+        ],
+        "tags": [
+          "scim",
+          "admin"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get a role by id",
+        "security": [
+          {
+            "oauth2": [
+              "admin"
+            ]
+          }
+        ],
+        "operationId": "get-getRole",
+        "description": "Get additional role information using the role unique identifier (id). The role id can be retrieved using the search API /scim/Roles?filter=..."
+      },
       "patch": {
         "responses": {
           "404": {
@@ -361,17 +376,16 @@
           "403": {
             "description": "Unauthorized"
           },
-          "500": {
-            "description": "Server error while patching SCIM role"
-          },
           "401": {
             "description": "No authentication provided"
+          },
+          "500": {
+            "description": "Server error while patching SCIM role"
           },
           "400": {
             "description": "If the supplied serialized JSON role is malformed"
           }
         },
-        "description": "Updates role's information. Commonly used to assign users to this role. The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=...\nPatch operation allows to send in the request the attributes that need to be changed only.",
         "parameters": [
           {
             "description": "the id of the role to update",
@@ -394,12 +408,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Update a role found by id",
         "security": [
@@ -409,56 +423,109 @@
             ]
           }
         ],
+        "operationId": "patch-patchRole",
         "consumes": [
           "application/json"
         ],
-        "operationId": "patch-patchRole"
-      },
+        "description": "Updates role's information. Commonly used to assign users to this role. The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=...\nPatch operation allows to send in the request the attributes that need to be changed only."
+      }
+    },
+    "/SAAS/jersey/manager/api/scim/Me": {
       "get": {
         "responses": {
           "200": {
             "description": "successful operation",
             "schema": {
-              "$ref": "#/definitions/SdkRoleResource"
+              "$ref": "#/definitions/SdkUserResource"
             }
           },
-          "404": {
-            "description": "If role id is not found"
-          },
-          "500": {
-            "description": "An unexpected error occurred"
-          },
           "400": {
-            "description": "One or more of the specified \"attributes\" parameter values is invalid"
+            "description": "The specified \"attributes\" parameter is invalid"
           }
         },
-        "description": "Get additional role information using the role unique identifier (id). The role id can be retrieved using the search API /scim/Roles?filter=...",
         "parameters": [
           {
-            "description": "the id of the role to retrieve",
-            "required": true,
-            "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb",
-            "in": "path",
-            "type": "string",
-            "name": "id"
-          },
-          {
-            "description": "list of attributes to return, separated by comma. When specified, the retrieved role will only contain the minimal set of role attributes plus the attributes or sub-attributes explicitly requested, i.e. {urn}:{Attribute name}.{Sub-Attribute name}",
+            "description": "list of attributes to return, separated by comma. When specified, the retrieved user will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
             "required": false,
-            "x-example": "displayName,meta.version,urn:scim:schemas:extension:workspace:1.0:description,",
+            "x-example": "userName,groups",
             "in": "query",
             "type": "string",
             "name": "attributes"
+          },
+          {
+            "description": "custom schema extension types for which user schema attributes need to be included",
+            "required": false,
+            "x-example": "myCustomSchema",
+            "in": "query",
+            "type": "string",
+            "name": "customSchemaExtensionTypes"
           }
+        ],
+        "tags": [
+          "scim",
+          "user"
         ],
         "produces": [
           "application/json"
+        ],
+        "summary": "Provides information about the logged-in user.",
+        "security": [
+          {
+            "oauth2": [
+              "user"
+            ]
+          }
+        ],
+        "operationId": "get-getUserForAuthenticatedUser",
+        "description": "Display the information for the user associated with the provided access token. The user's attributes can be filtered using the 'attributes' parameter."
+      }
+    },
+    "/SAAS/jersey/manager/api/scim/Schemas": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResourceDescriptor"
+            }
+          },
+          "400": {
+            "description": "No \"filter\" has been specified or the specified \"filter\" is invalid: an operator other than 'eq' has been specified, the given schema does not exist or the equality is not based on the 'name'"
+          }
+        },
+        "parameters": [
+          {
+            "description": "Only schemas matching the filter expression will be returned. Only 'eq' is supported as an operator for this filter",
+            "required": false,
+            "x-example": "name eq \"User\"",
+            "in": "query",
+            "type": "string",
+            "name": "filter"
+          },
+          {
+            "description": "The directory UUID. If specified, the schema associated to this particular directory will be returned as well, if any. Only available for the 'User' schema ",
+            "required": false,
+            "x-example": "name eq \"User\"",
+            "in": "query",
+            "type": "string",
+            "name": "directoryUuid"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The list of custom schemas separated by a comma. If specified, the specified schema(s) attributes will be returned as well. Only available for the 'User' schema",
+            "in": "query",
+            "name": "customSchemaExtensionTypes"
+          }
         ],
         "tags": [
           "scim",
           "admin"
         ],
-        "summary": "Get a role by id",
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Find specific schema using the supplied filter",
         "security": [
           {
             "oauth2": [
@@ -466,10 +533,108 @@
             ]
           }
         ],
-        "operationId": "get-getRole"
+        "operationId": "get-getSchemas",
+        "description": "It is not possible to list all the available schemas, a filter must be specified. The filter only supports the equality operator ('eq') on the 'name' attribute"
       }
     },
     "/SAAS/jersey/manager/api/scim/Users/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SdkUserResource"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "description": "the id of the user to retrieve",
+            "required": true,
+            "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394",
+            "in": "path",
+            "type": "string",
+            "name": "id"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "when specified, the returned user will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
+            "in": "query",
+            "name": "attributes"
+          },
+          {
+            "description": "the directory identifier. This identifier will be used to retrieve local directory's user attribute definitions (if any). If not specified, the user attribute definitions defined for the tenant will be used.",
+            "required": false,
+            "x-example": "ca6c160e-5bb9-422c-8d71-777a90241dea",
+            "in": "query",
+            "type": "string",
+            "name": "directoryUuid"
+          },
+          {
+            "description": "custom schema extension types for which user schema attributes needs to be included",
+            "required": false,
+            "x-example": "my-custom-schema",
+            "in": "query",
+            "type": "string",
+            "name": "customSchemaExtensionTypes"
+          }
+        ],
+        "tags": [
+          "scim",
+          "admin"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get a user by id",
+        "security": [
+          {
+            "oauth2": [
+              "admin"
+            ]
+          }
+        ],
+        "operationId": "get-getUser",
+        "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=..."
+      },
+      "delete": {
+        "responses": {
+          "404": {
+            "description": "The specified user does not exist"
+          },
+          "500": {
+            "description": "An unexpected error occurred"
+          }
+        },
+        "parameters": [
+          {
+            "description": "the id of the user to delete",
+            "required": true,
+            "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394",
+            "in": "path",
+            "type": "string",
+            "name": "id"
+          }
+        ],
+        "tags": [
+          "scim",
+          "admin"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Delete a user found by id",
+        "security": [
+          {
+            "oauth2": [
+              "admin"
+            ]
+          }
+        ],
+        "operationId": "delete-deleteUser",
+        "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=..."
+      },
       "patch": {
         "responses": {
           "404": {
@@ -485,7 +650,6 @@
             "description": "The supplied JSON is incorrect"
           }
         },
-        "description": "Updates user's information. The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.",
         "parameters": [
           {
             "description": "the id of the user to update",
@@ -508,12 +672,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Update a user found by id",
         "security": [
@@ -523,21 +687,68 @@
             ]
           }
         ],
-        "operationId": "patch-patchUser"
+        "operationId": "patch-patchUser",
+        "description": "Updates user's information. The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...\nPatch operation allows to send in the request only attributes that need to be changed."
+      }
+    },
+    "/SAAS/jersey/manager/api/scim/Groups/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/SdkGroupResource"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "description": "the id of the group to retrieve",
+            "required": true,
+            "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb",
+            "in": "path",
+            "type": "string",
+            "name": "id"
+          },
+          {
+            "description": "when specified, the returned group will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
+            "required": false,
+            "x-example": "displayName",
+            "in": "query",
+            "type": "string",
+            "name": "attributes"
+          }
+        ],
+        "tags": [
+          "scim",
+          "admin"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get a group by id",
+        "security": [
+          {
+            "oauth2": [
+              "admin"
+            ]
+          }
+        ],
+        "operationId": "get-getGroup",
+        "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=..."
       },
       "delete": {
         "responses": {
           "404": {
-            "description": "The specified user does not exist"
+            "description": "The specified group does not exist."
           },
           "500": {
-            "description": "An unexpected error occurred"
+            "description": "An unexpected error occurred."
           }
         },
-        "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...",
         "parameters": [
           {
-            "description": "the id of the user to delete",
+            "description": "the id of the group to delete",
             "required": true,
             "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394",
             "in": "path",
@@ -545,14 +756,14 @@
             "name": "id"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
         ],
-        "summary": "Delete a user found by id",
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Delete a group found by id",
         "security": [
           {
             "oauth2": [
@@ -560,243 +771,9 @@
             ]
           }
         ],
-        "operationId": "delete-deleteUser"
+        "operationId": "delete-deleteGroup",
+        "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=..."
       },
-      "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/SdkUserResource"
-            }
-          }
-        },
-        "description": "The user id is a unique internal identifier and can be retrieved using the search API /scim/Users?filter=...",
-        "parameters": [
-          {
-            "description": "the id of the user to retrieve",
-            "required": true,
-            "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394",
-            "in": "path",
-            "type": "string",
-            "name": "id"
-          },
-          {
-            "description": "when specified, the returned user will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
-            "required": false,
-            "type": "string",
-            "name": "attributes",
-            "in": "query"
-          },
-          {
-            "description": "the directory identifier. This identifier will be used to retrieve local directory's user attribute definitions (if any). If not specified, the user attribute definitions defined for the tenant will be used.",
-            "required": false,
-            "x-example": "ca6c160e-5bb9-422c-8d71-777a90241dea",
-            "in": "query",
-            "type": "string",
-            "name": "directoryUuid"
-          },
-          {
-            "description": "custom schema extension types for which user schema attributes needs to be included",
-            "required": false,
-            "x-example": "my-custom-schema",
-            "in": "query",
-            "type": "string",
-            "name": "customSchemaExtensionTypes"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "scim",
-          "admin"
-        ],
-        "summary": "Get a user by id",
-        "security": [
-          {
-            "oauth2": [
-              "admin"
-            ]
-          }
-        ],
-        "operationId": "get-getUser"
-      }
-    },
-    "/SAAS/auth/oauth2/authorize": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "string"
-            }
-          },
-          "400": {
-            "description": "The error can be any of those: no client_id has been specified, the client_id does not exist, the redirect_uri has not been specified or does not match. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
-          }
-        },
-        "parameters": [
-          {
-            "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in your OAuth2.0 client registration in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.",
-            "required": true,
-            "x-example": "https://example-app.com/redirect?auth%3Doauth",
-            "in": "query",
-            "type": "string",
-            "name": "redirect_uri"
-          },
-          {
-            "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.",
-            "required": true,
-            "x-example": "Example_AppID",
-            "in": "query",
-            "type": "string",
-            "name": "client_id"
-          },
-          {
-            "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.",
-            "required": true,
-            "x-example": "code",
-            "in": "query",
-            "type": "string",
-            "name": "response_type"
-          },
-          {
-            "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.",
-            "required": false,
-            "x-example": "5aPY-C1JSeyTiUPWV_DLDw",
-            "in": "query",
-            "type": "string",
-            "name": "state"
-          },
-          {
-            "description": "The list of scopes of the authorization request separated by a space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the OAuth2.0 client.",
-            "required": false,
-            "x-example": "openid+profile+email+user",
-            "in": "query",
-            "type": "string",
-            "name": "scope"
-          },
-          {
-            "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ",
-            "required": false,
-            "type": "string",
-            "name": "domain",
-            "in": "query"
-          },
-          {
-            "description": "Specifies the user's login. In case your application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.",
-            "required": false,
-            "type": "string",
-            "name": "u",
-            "in": "query"
-          }
-        ],
-        "tags": [
-          "oauth2",
-          "login"
-        ],
-        "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. To use this endpoint, your application must be registered as an OAuth 2.0 client in VMware Identity Manager and have the 'authorization_code' grant type enabled.",
-        "summary": "OAuth 2.0 authorization endpoint",
-        "operationId": "get-doOAuth2Authorize"
-      }
-    },
-    "/SAAS/auth/oauthtoken": {
-      "post": {
-        "responses": {
-          "200": {
-            "description": "Successful",
-            "schema": {
-              "$ref": "#/definitions/OAuth2Token"
-            }
-          },
-          "405": {
-            "description": "The HTTP method might be incorrect, make sure you use the POST method."
-          },
-          "500": {
-            "description": "The grant_type is incorrect or absent."
-          },
-          "401": {
-            "description": "The client authentication failed. Check the 'Authorization' header."
-          },
-          "400": {
-            "description": "The error can be any of those: the provided grant type is not supported, the request is missing a required parameter, the client authentication failed, the provided authorization grant is invalid, the authenticated client is not authorized to use this authorization grant type. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
-          }
-        },
-        "parameters": [
-          {
-            "description": "Specifies the OAuth grant type the client is making. VMware Identity Manager supports the following grant types from the OAuth specifications: authorization_code, password, client_credentials, and refresh_token. VMware Identity Manager also supports the grant type urn:ietf:params:oauth:grant-type:jwt-bearer for using JWTs for authorization as described in the JWT Bearer Token Profiles for OAuth 2.0 specifications.",
-            "required": true,
-            "type": "string",
-            "name": "grant_type",
-            "in": "query"
-          },
-          {
-            "description": "The client identifier. If the HTTP Basic authentication scheme is not used, client must specify the client identifier using this request parameter. The use of HTTP Basic is recommended.\n",
-            "required": false,
-            "x-example": "Example_AppID",
-            "in": "query",
-            "type": "string",
-            "name": "client_id"
-          },
-          {
-            "description": "The username, UTF-8 encoded. Required only if the grant_type is 'password'",
-            "required": false,
-            "type": "string",
-            "name": "username",
-            "in": "query"
-          },
-          {
-            "description": "The password, UTF-8 encoded. Required only if the grant_type is 'password'",
-            "required": false,
-            "type": "string",
-            "name": "password",
-            "in": "query"
-          },
-          {
-            "description": "The domain the user belongs to. Optional and only used if the grant_type is 'password'",
-            "required": false,
-            "type": "string",
-            "name": "domain",
-            "in": "query"
-          },
-          {
-            "description": "The list of scopes of the access request. Required only if the grant_type is 'password'",
-            "required": false,
-            "type": "string",
-            "name": "scope",
-            "in": "query"
-          },
-          {
-            "description": "The authorization code received from the authorize request. Required only if the grant_type is 'authorization_code'",
-            "required": false,
-            "type": "string",
-            "name": "code",
-            "in": "query"
-          },
-          {
-            "description": "The redirect_uri as provided to the authorize request. Required only if the grant_type is 'authorization_code'",
-            "required": false,
-            "type": "string",
-            "name": "redirect_uri",
-            "in": "query"
-          }
-        ],
-        "tags": [
-          "oauth2",
-          "login"
-        ],
-        "description": "This token endpoint complies with the OAuth 2.0 specifications and must be used by client to obtain an access token with client authentication.",
-        "summary": "Obtain an OAuth 2.0 access token and optionally a refresh token",
-        "security": [
-          {
-            "basic_auth": []
-          }
-        ],
-        "operationId": "post-handleRequest"
-      }
-    },
-    "/SAAS/jersey/manager/api/scim/Groups/{id}": {
       "patch": {
         "responses": {
           "500": {
@@ -806,7 +783,6 @@
             "description": "The supplied JSON is incorrect"
           }
         },
-        "description": "Updates group's information. The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...\nPatch operation allows to send in the request only attributes that need to be changed.",
         "parameters": [
           {
             "description": "the id of the group to update",
@@ -829,12 +805,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Update a group found by id",
         "security": [
@@ -844,145 +820,11 @@
             ]
           }
         ],
+        "operationId": "patch-patchGroup",
         "consumes": [
           "application/json"
         ],
-        "operationId": "patch-patchGroup"
-      },
-      "delete": {
-        "responses": {
-          "404": {
-            "description": "The specified group does not exist."
-          },
-          "500": {
-            "description": "An unexpected error occurred."
-          }
-        },
-        "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...",
-        "parameters": [
-          {
-            "description": "the id of the group to delete",
-            "required": true,
-            "x-example": "d24afa39-05a1-433f-8aa9-ad41c9a3d394",
-            "in": "path",
-            "type": "string",
-            "name": "id"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "scim",
-          "admin"
-        ],
-        "summary": "Delete a group found by id",
-        "security": [
-          {
-            "oauth2": [
-              "admin"
-            ]
-          }
-        ],
-        "operationId": "delete-deleteGroup"
-      },
-      "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/SdkGroupResource"
-            }
-          }
-        },
-        "description": "The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...",
-        "parameters": [
-          {
-            "description": "the id of the group to retrieve",
-            "required": true,
-            "x-example": "a1ac2b75-6c41-45e9-8349-59746c529ccb",
-            "in": "path",
-            "type": "string",
-            "name": "id"
-          },
-          {
-            "description": "when specified, the returned group will contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
-            "required": false,
-            "x-example": "displayName",
-            "in": "query",
-            "type": "string",
-            "name": "attributes"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "scim",
-          "admin"
-        ],
-        "summary": "Get a group by id",
-        "security": [
-          {
-            "oauth2": [
-              "admin"
-            ]
-          }
-        ],
-        "operationId": "get-getGroup"
-      }
-    },
-    "/SAAS/API/1.0/REST/auth/token": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "type": "string"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "enum": [
-              "isValid",
-              "isRevoked",
-              "publicKey"
-            ],
-            "description": "the type of operation to perform on the token. Use \"isValid\" to validate a token, \"isRevoked\" to check the revocation status, and \"publicKey\" to retrieve the public key",
-            "required": true,
-            "in": "query",
-            "type": "string",
-            "name": "attribute"
-          },
-          {
-            "description": "the tenant to retrieve the public key for (only valid when attribute is publicKey), if the tenant is different from the one in the request URL",
-            "required": false,
-            "type": "string",
-            "name": "tenant",
-            "in": "query"
-          },
-          {
-            "enum": [
-              "pem",
-              "jwks",
-              "jwk"
-            ],
-            "description": "the format of the public key (only valid when attribute is publicKey). Use \"pem\" to retrieve the key in PEM format, \"jwks\" to get the key in JWKS format, and \"jwk\" to get in the key in the JWK format (early draft)",
-            "default": "jwk",
-            "required": false,
-            "in": "query",
-            "type": "string",
-            "name": "format"
-          }
-        ],
-        "tags": [
-          "oauth2",
-          "oidc"
-        ],
-        "description": "This endpoint allows applications to validate the access token issued by VMware Identity Manager, and to retrieve the public key used to sign the token.",
-        "summary": "Retrieve the public key to validate a token or check the given access token",
-        "operationId": "get-getTokenAttribute"
+        "description": "Updates group's information. The group id is a unique internal identifier and can be retrieved using the search API /scim/Groups?filter=...\nPatch operation allows to send in the request only attributes that need to be changed."
       }
     },
     "/SAAS/jersey/manager/api/scim/Groups/.search": {
@@ -998,7 +840,6 @@
             "description": "The specified search request is invalid"
           }
         },
-        "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nThis serves the same function as the GET /scim/Groups API but using a POST method so that the length of the request is not limited.",
         "parameters": [
           {
             "description": "the search request",
@@ -1013,12 +854,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Find all groups or only groups matching a supplied filter",
         "security": [
@@ -1028,10 +869,11 @@
             ]
           }
         ],
+        "operationId": "post-findGroups",
         "consumes": [
           "application/json"
         ],
-        "operationId": "post-findGroups"
+        "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications, see https://tools.ietf.org/html/rfc7644#page-15.\nThis serves the same function as the GET /scim/Groups API but using a POST method so that the length of the request is not limited."
       }
     },
     "/SAAS/auth/device/register": {
@@ -1050,6 +892,7 @@
             "description": "The error can be any of those: the app_product_id does not exist, the user_device is not specified or incorrect, the redirect_uri is not specified or invalid or does not match the one in the app_product_id."
           }
         },
+        "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.",
         "parameters": [
           {
             "description": "Specifies the name of the template that was registered with VMware Identity Manager.",
@@ -1113,7 +956,6 @@
           "oauth2",
           "login"
         ],
-        "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.",
         "summary": "Authenticate a user on a device by registering the user's device in the system.",
         "operationId": "post-doDeviceRegister"
       },
@@ -1132,6 +974,7 @@
             "description": "The error can be any of those: the app_product_id does not exist, the user_device is not specified or incorrect, the redirect_uri is not specified or invalid or does not match the one in the app_product_id."
           }
         },
+        "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.",
         "parameters": [
           {
             "description": "Specifies the name of the template that was registered with VMware Identity Manager.",
@@ -1195,60 +1038,8 @@
           "oauth2",
           "login"
         ],
-        "description": "This endpoint is the starting point of a mobile device dynamic client registration flow.",
         "summary": "Authenticate a user on a device by registering the user's device in the system.",
         "operationId": "get-doDeviceRegister"
-      }
-    },
-
-    "/SAAS/jersey/manager/api/scim/Me": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$ref": "#/definitions/SdkUserResource"
-            }
-          },
-          "400": {
-            "description": "The specified \"attributes\" parameter is invalid"
-          }
-        },
-        "description": "Display the information for the user associated with the provided access token. The user's attributes can be filtered using the 'attributes' parameter.",
-        "parameters": [
-          {
-            "description": "list of attributes to return, separated by comma. When specified, the retrieved user will only contain the minimal set of user attributes plus the attributes or sub-attributes explicitly requested",
-            "required": false,
-            "x-example": "userName,groups",
-            "in": "query",
-            "type": "string",
-            "name": "attributes"
-          },
-          {
-            "description": "custom schema extension types for which user schema attributes need to be included",
-            "required": false,
-            "x-example": "myCustomSchema",
-            "in": "query",
-            "type": "string",
-            "name": "customSchemaExtensionTypes"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "scim",
-          "user"
-        ],
-        "summary": "Provides information about the logged-in user.",
-        "security": [
-          {
-            "oauth2": [
-              "user"
-            ]
-          }
-        ],
-        "operationId": "get-getUserForAuthenticatedUser"
       }
     },
     "/SAAS/jersey/manager/api/scim/Roles": {
@@ -1270,7 +1061,6 @@
             "description": "The specified \"filter\" or \"attributes\" parameter values are invalid"
           }
         },
-        "description": "The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter=",
         "parameters": [
           {
             "description": "list of attributes to return, separated by comma. When specified, the retrieved role(s)will only contain the minimal set of role attributes plus the attributes or sub-attributes explicitly requested, i.e. {urn}:{Attribute name}.{Sub-Attribute name}",
@@ -1307,12 +1097,12 @@
             "name": "count"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Find all roles or only roles matching a supplied filter",
         "security": [
@@ -1322,7 +1112,47 @@
             ]
           }
         ],
-        "operationId": "get-getRoles"
+        "operationId": "get-getRoles",
+        "description": "The role id is a unique internal identifier and can be retrieved using the search API /scim/Roles?filter="
+      }
+    },
+    "/SAAS/API/1.0/REST/oauth2/activate": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/OAuth2ClientActivationDetails"
+            }
+          },
+          "404": {
+            "description": "Activation failed, organization not found."
+          },
+          "500": {
+            "description": "Activation failed, unknown error."
+          },
+          "400": {
+            "description": "Activation failed, activation code is invalid or not specified."
+          }
+        },
+        "description": "This endpoint is used in the dynamic mobile registration flow. The activation code is obtained by calling the /SAAS/auth/device/register endpoint. The client_secret and client_id returned in this call will be used in the call to the /SAAS/auth/oauthtoken endpoint.",
+        "parameters": [
+          {
+            "required": true,
+            "in": "body",
+            "description": "the activation code",
+            "name": "body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "mobile",
+          "oauth2"
+        ],
+        "summary": "Activate the device client by exchanging an activation code for a client ID and client secret.",
+        "operationId": "post-activateOauth2Client"
       }
     },
     "/SAAS/jersey/manager/api/oauth2clients/{id}": {
@@ -1344,7 +1174,6 @@
             "description": "If the provided client information is malformed"
           }
         },
-        "description": "This endpoint is used to update information of an existing client, using a client id. Renaming the client (update client id) is not supported; To rename a client, it needs to be deleted first and then re-created",
         "parameters": [
           {
             "description": "the id of the oauth2client to be updated",
@@ -1355,12 +1184,12 @@
             "name": "id"
           }
         ],
-        "produces": [
-          "application/vnd.vmware.horizon.manager.oauth2client+json"
-        ],
         "tags": [
           "admin",
           "oauth2"
+        ],
+        "produces": [
+          "application/vnd.vmware.horizon.manager.oauth2client+json"
         ],
         "summary": "Update an existing OAuth 2.0 client",
         "security": [
@@ -1370,23 +1199,56 @@
             ]
           }
         ],
+        "operationId": "put-updateOAuth2Client",
         "consumes": [
           "application/vnd.vmware.horizon.manager.oauth2client+json"
         ],
-        "operationId": "put-updateOAuth2Client"
+        "description": "This endpoint is used to update information of an existing client, using a client id. Renaming the client (update client id) is not supported; To rename a client, it needs to be deleted first and then re-created"
       },
-      "delete": {
+      "get": {
         "responses": {
-          "404": {
-            "description": "given client does not exist"
-          },
-          "204": {
+          "200": {
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/OAuth2ClientTypeInfo"
             }
+          },
+          "404": {
+            "description": "If the OAuth2 client id is null or not found"
           }
         },
+        "parameters": [
+          {
+            "description": "the id of the oauth2client to retrieve",
+            "required": true,
+            "x-example": "auth_grant_oauthclient1",
+            "in": "path",
+            "type": "string",
+            "name": "id"
+          }
+        ],
+        "tags": [
+          "admin",
+          "oauth2"
+        ],
+        "produces": [
+          "application/vnd.vmware.horizon.manager.oauth2client+json",
+          "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json",
+          "application/vnd.vmware.horizon.manager.classicoauth2client+json"
+        ],
+        "summary": "View an existing OAuth 2.0 client",
+        "security": [
+          {
+            "oauth2": [
+              "admin"
+            ]
+          }
+        ],
+        "operationId": "get-getOAuth2Client",
+        "description": "This endpoint is used to get full details of a registered OAuth 2.0 Client on VMware Identity Manager"
+      },
+      "delete": {
+        "description": "This endpoint is used to delete an existing client. Once deleted, the client information, its associated suite tokens, activation tokens, authorization codes, access tokens and refresh tokens will be lost. The operation cannot be undone",
         "parameters": [
           {
             "description": "the id of the OAuth2 client to be deleted",
@@ -1401,7 +1263,6 @@
           "admin",
           "oauth2"
         ],
-        "description": "This endpoint is used to delete an existing client. Once deleted, the client information, its associated suite tokens, activation tokens, authorization codes, access tokens and refresh tokens will be lost. The operation cannot be undone",
         "summary": "Delete an OAuth 2.0 client",
         "security": [
           {
@@ -1410,49 +1271,18 @@
             ]
           }
         ],
-        "operationId": "delete-deleteOAuth2Client"
-      },
-      "get": {
+        "operationId": "delete-deleteOAuth2Client",
         "responses": {
-          "200": {
+          "404": {
+            "description": "given client does not exist"
+          },
+          "204": {
             "description": "successful operation",
             "schema": {
               "$ref": "#/definitions/OAuth2ClientTypeInfo"
             }
-          },
-          "404": {
-            "description": "If the OAuth2 client id is null or not found"
           }
-        },
-        "description": "This endpoint is used to get full details of a registered OAuth 2.0 Client on VMware Identity Manager",
-        "parameters": [
-          {
-            "description": "the id of the oauth2client to retrieve",
-            "required": true,
-            "x-example": "auth_grant_oauthclient1",
-            "in": "path",
-            "type": "string",
-            "name": "id"
-          }
-        ],
-        "produces": [
-          "application/vnd.vmware.horizon.manager.oauth2client+json",
-          "application/vnd.vmware.horizon.manager.clientcredentialsoauth2client+json",
-          "application/vnd.vmware.horizon.manager.classicoauth2client+json"
-        ],
-        "tags": [
-          "admin",
-          "oauth2"
-        ],
-        "summary": "View an existing OAuth 2.0 client",
-        "security": [
-          {
-            "oauth2": [
-              "admin"
-            ]
-          }
-        ],
-        "operationId": "get-getOAuth2Client"
+        }
       }
     },
     "/SAAS/jersey/manager/api/scim/Groups": {
@@ -1471,7 +1301,6 @@
             "description": "The specified attributes are invalid or the displayName of the group to be created is missing or invalid"
           }
         },
-        "description": "Creates a group in the system directory",
         "parameters": [
           {
             "description": "list of attributes to return, separated by comma. When specified, the returned created group will only contain the minimal set of group attributes plus the attributes or sub-attributes explicitly requested",
@@ -1494,12 +1323,12 @@
             }
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Create a local group",
         "security": [
@@ -1509,10 +1338,11 @@
             ]
           }
         ],
+        "operationId": "post-postGroup",
         "consumes": [
           "application/json"
         ],
-        "operationId": "post-postGroup"
+        "description": "Creates a group in the system directory"
       },
       "get": {
         "responses": {
@@ -1529,7 +1359,6 @@
             "description": "The specified filter operation is invalid or the specified \"attributes\" are invalid or the \"sortBy\" parameter is invalid"
           }
         },
-        "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15",
         "parameters": [
           {
             "description": "list of attributes to return, separated by comma. When specified, the retrieved group(s) will only contain the minimal set of group attributes plus the attributes or sub-attributes explicitly requested",
@@ -1574,23 +1403,23 @@
             "name": "sortBy"
           },
           {
+            "required": false,
+            "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\"",
             "enum": [
               "ascending",
               "descending"
             ],
-            "description": "the direction the resources returned should be sorted in. Allowed values are \"ascending\" and \"descending\"",
-            "required": false,
             "in": "query",
             "type": "string",
             "name": "sortOrder"
           }
         ],
-        "produces": [
-          "application/json"
-        ],
         "tags": [
           "scim",
           "admin"
+        ],
+        "produces": [
+          "application/json"
         ],
         "summary": "Find all groups or only groups matching a supplied filter",
         "security": [
@@ -1600,7 +1429,234 @@
             ]
           }
         ],
-        "operationId": "get-getGroups"
+        "operationId": "get-getGroups",
+        "description": "Retrieve all groups if no filter is specified, otherwise retrieve all the groups matching the given filter.\nThis endpoint complies with the SCIM specifications; see https://tools.ietf.org/html/rfc7644#page-15"
+      }
+    },
+    "/SAAS/API/1.0/REST/auth/token": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "This endpoint allows applications to validate the access token issued by VMware Identity Manager, and to retrieve the public key used to sign the token.",
+        "parameters": [
+          {
+            "required": true,
+            "description": "the type of operation to perform on the token. Use \"isValid\" to validate a token, \"isRevoked\" to check the revocation status, and \"publicKey\" to retrieve the public key",
+            "enum": [
+              "isValid",
+              "isRevoked",
+              "publicKey"
+            ],
+            "in": "query",
+            "type": "string",
+            "name": "attribute"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "the tenant to retrieve the public key for (only valid when attribute is publicKey), if the tenant is different from the one in the request URL",
+            "in": "query",
+            "name": "tenant"
+          },
+          {
+            "required": false,
+            "description": "the format of the public key (only valid when attribute is publicKey). Use \"pem\" to retrieve the key in PEM format, \"jwks\" to get the key in JWKS format, and \"jwk\" to get in the key in the JWK format (early draft)",
+            "default": "jwk",
+            "enum": [
+              "pem",
+              "jwks",
+              "jwk"
+            ],
+            "in": "query",
+            "type": "string",
+            "name": "format"
+          }
+        ],
+        "tags": [
+          "oauth2",
+          "oidc"
+        ],
+        "summary": "Retrieve the public key to validate a token or check the given access token",
+        "operationId": "get-getTokenAttribute"
+      }
+    },
+    "/SAAS/auth/oauthtoken": {
+      "post": {
+        "description": "This token endpoint complies with the OAuth 2.0 specifications and must be used by client to obtain an access token with client authentication.",
+        "parameters": [
+          {
+            "required": true,
+            "type": "string",
+            "description": "Specifies the OAuth grant type the client is making. VMware Identity Manager supports the following grant types from the OAuth specifications: authorization_code, password, client_credentials, and refresh_token. VMware Identity Manager also supports the grant type urn:ietf:params:oauth:grant-type:jwt-bearer for using JWTs for authorization as described in the JWT Bearer Token Profiles for OAuth 2.0 specifications.",
+            "in": "query",
+            "name": "grant_type"
+          },
+          {
+            "description": "The client identifier. If the HTTP Basic authentication scheme is not used, client must specify the client identifier using this request parameter. The use of HTTP Basic is recommended.\n",
+            "required": false,
+            "x-example": "Example_AppID",
+            "in": "query",
+            "type": "string",
+            "name": "client_id"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The username, UTF-8 encoded. Required only if the grant_type is 'password'",
+            "in": "query",
+            "name": "username"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The password, UTF-8 encoded. Required only if the grant_type is 'password'",
+            "in": "query",
+            "name": "password"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The domain the user belongs to. Optional and only used if the grant_type is 'password'",
+            "in": "query",
+            "name": "domain"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The list of scopes of the access request. Required only if the grant_type is 'password'",
+            "in": "query",
+            "name": "scope"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The authorization code received from the authorize request. Required only if the grant_type is 'authorization_code'",
+            "in": "query",
+            "name": "code"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "The redirect_uri as provided to the authorize request. Required only if the grant_type is 'authorization_code'",
+            "in": "query",
+            "name": "redirect_uri"
+          }
+        ],
+        "tags": [
+          "oauth2",
+          "login"
+        ],
+        "summary": "Obtain an OAuth 2.0 access token and optionally a refresh token",
+        "security": [
+          {
+            "basic_auth": []
+          }
+        ],
+        "operationId": "post-handleRequest",
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "schema": {
+              "$ref": "#/definitions/OAuth2Token"
+            }
+          },
+          "405": {
+            "description": "The HTTP method might be incorrect, make sure you use the POST method."
+          },
+          "401": {
+            "description": "The client authentication failed. Check the 'Authorization' header."
+          },
+          "500": {
+            "description": "The grant_type is incorrect or absent."
+          },
+          "400": {
+            "description": "The error can be any of those: the provided grant type is not supported, the request is missing a required parameter, the client authentication failed, the provided authorization grant is invalid, the authenticated client is not authorized to use this authorization grant type. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
+          }
+        }
+      }
+    },
+    "/SAAS/auth/oauth2/authorize": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "The error can be any of those: no client_id has been specified, the client_id does not exist, the redirect_uri has not been specified or does not match. The error message will contain 'error' and 'error_description' fields. See the OAuth2.0 spec for further details."
+          }
+        },
+        "description": "This is the starting point of the OAuth 2.0 flow to authenticate end users from your application.This authorization endpoint complies with the OAuth 2.0 specifications and must be used by clients to authenticate users and obtain an authorization code. To use this endpoint, your application must be registered as an OAuth 2.0 client in VMware Identity Manager and have the 'authorization_code' grant type enabled.",
+        "parameters": [
+          {
+            "description": "Specifies the callback endpoint in your application that will receive the authorization code. It must match the redirect_uri defined in your OAuth2.0 client registration in VMware Identity Manager. When sending the redirect_uri as a URL parameter it has to be URL encoded.",
+            "required": true,
+            "x-example": "https://example-app.com/redirect?auth%3Doauth",
+            "in": "query",
+            "type": "string",
+            "name": "redirect_uri"
+          },
+          {
+            "description": "This is the identifier of the OAuth 2.0 client that was registered in VMware Identity Manager.",
+            "required": true,
+            "x-example": "Example_AppID",
+            "in": "query",
+            "type": "string",
+            "name": "client_id"
+          },
+          {
+            "description": "Specifies how the application should receive the authorization response. Only 'code' is supported.",
+            "required": true,
+            "x-example": "code",
+            "in": "query",
+            "type": "string",
+            "name": "response_type"
+          },
+          {
+            "description": "A random string that your application generates and that will be sent back as a parameter during the URI redirection.",
+            "required": false,
+            "x-example": "5aPY-C1JSeyTiUPWV_DLDw",
+            "in": "query",
+            "type": "string",
+            "name": "state"
+          },
+          {
+            "description": "The list of scopes of the authorization request separated by a space and is URL encoded. The scopes must be equivalent or a subset of the scopes defined in the OAuth2.0 client.",
+            "required": false,
+            "x-example": "openid+profile+email+user",
+            "in": "query",
+            "type": "string",
+            "name": "scope"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "Specifies the user's domain. If this parameter is specified, the login screen will skip the domain selection page. This can be used when it is known that a single domain is used or the domain information can be inferred automatically (from the username for example).This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification. ",
+            "in": "query",
+            "name": "domain"
+          },
+          {
+            "required": false,
+            "type": "string",
+            "description": "Specifies the user's login. In case your application already knows what user is going to login, and VMware Identity Manager will have to pass this user to a third-party IdP, then adding this parameter will send the username as part of the SAML request. This is a VMware Identity Manager optional parameter and is not in the OAuth 2.0 specification.",
+            "in": "query",
+            "name": "u"
+          }
+        ],
+        "tags": [
+          "oauth2",
+          "login"
+        ],
+        "summary": "OAuth 2.0 authorization endpoint",
+        "operationId": "get-doOAuth2Authorize"
       }
     }
   },
@@ -1650,10 +1706,10 @@
       "type": "object",
       "properties": {
         "accessTokenTTL": {
-          "description": "How long in minutes new access tokens issued to this client should live",
+          "format": "int32",
           "type": "integer",
-          "example": 10080,
-          "format": "int32"
+          "description": "How long in minutes new access tokens issued to this client should live",
+          "example": 10080
         },
         "tokenType": {
           "enum": [
@@ -1662,6 +1718,12 @@
           "type": "string",
           "example": "Bearer",
           "description": "type of the tokens that can be requested"
+        },
+        "displayUserGrant": {
+          "default": false,
+          "type": "boolean",
+          "example": false,
+          "description": "Indicates whether to display grant page to user or not. If the value is set to false, then access is granted to clients according to org policy without asking user. Default is 'true'"
         },
         "strData": {
           "type": "string",
@@ -1674,21 +1736,15 @@
           "description": "A friendly name this native app/device is remembered as. Set by the admin"
         },
         "tokenLength": {
-          "description": "The length of the refresh token to be returned in bytes (only applicable if authGrantTypes includes \"refresh_token\"). Currently the refresh token length is constant and this value is ignored.",
+          "format": "int32",
           "type": "integer",
-          "example": 32,
-          "format": "int32"
+          "description": "The length of the refresh token to be returned in bytes (only applicable if authGrantTypes includes \"refresh_token\"). Currently the refresh token length is constant and this value is ignored.",
+          "example": 32
         },
         "clientId": {
           "type": "string",
           "example": "my-auth-grant-client1",
           "description": "The OAuth 2.0 Client identifier that the client uses to identify itself during the OAuth2 exchanges. The client ID must contain only alphanumeric (A-Z, a-z, 0-9), period (.), underscore (_), hyphen (-) and at sign (@) characters"
-        },
-        "refreshTokenTTL": {
-          "description": " How long in minutes new refresh tokens issued to this client should live (only applicable if authGrantTypes includes \"refresh_token\")",
-          "type": "integer",
-          "example": 525600,
-          "format": "int32"
         },
         "internalSystemClient": {
           "default": false,
@@ -1701,11 +1757,11 @@
           "example": "my-auth-grant-client1-secret",
           "description": "The OAuth 2.0 Client secret (a string provided by an admin or a VMware Identity Manager auto-generated string). If secret string not provided, an auto-generated secret will be returned. Secret field is mandatory in Authorization Code and Client Credentials Grant flows. If the secret field is omitted or left blank in Resource Owner grant flow, no secret will be required to authenticate the client"
         },
-        "displayUserGrant": {
-          "default": false,
-          "type": "boolean",
-          "example": false,
-          "description": "Indicates whether to display grant page to user or not. If the value is set to false, then access is granted to clients according to org policy without asking user. Default is 'true'"
+        "refreshTokenTTL": {
+          "format": "int32",
+          "type": "integer",
+          "description": " How long in minutes new refresh tokens issued to this client should live (only applicable if authGrantTypes includes \"refresh_token\")",
+          "example": 525600
         },
         "_links": {
           "additionalProperties": {
@@ -1720,21 +1776,21 @@
           "example": true,
           "description": "If set to 'true' will allow the child tenants to look up clientId and secret at the root level. Default is 'false'"
         },
-        "scope": {
+        "resourceUuid": {
+          "format": "uuid",
           "type": "string",
-          "example": "admin user openid profile email",
-          "description": "list of space-delimited access request scopes that are allowed by this OAuth 2.0 Client. Available scope options are: admin- Admin Level Access, user - User Level Access, profile - Access to User's profile (FirstName//LastName//Display Name//Image), email - Access to User's Email, uuid  - Access for a specific application/resource which matches this UUID"
+          "description": "UUID of a VMware Identity application. Only users who are entitled to this application will be able to authenticate via this client.",
+          "example": "9e70bee8-3a55-4413-8418-454e7278093e"
         },
         "activationToken": {
           "type": "string",
           "example": "eyJvdGEiOiIzOkhyYUwzQ2hTWGJKd3hzSnNCdkc2cjM0eDZDRng4blFkIiwidXJsIjoiaHR0cHM6Ly9ndy1hYS5ocy50cmNpbnQuY29tLyIsInRpZCI6Imd3LWFhIn0=",
           "description": "A one time token that can be used to securely activate an application with the client id and secret. Generating an activation token is currently not supported through this API"
         },
-        "resourceUuid": {
-          "description": "UUID of a VMware Identity application. Only users who are entitled to this application will be able to authenticate via this client.",
+        "scope": {
           "type": "string",
-          "example": "9e70bee8-3a55-4413-8418-454e7278093e",
-          "format": "uuid"
+          "example": "admin user openid profile email",
+          "description": "list of space-delimited access request scopes that are allowed by this OAuth 2.0 Client. Available scope options are: admin- Admin Level Access, user - User Level Access, profile - Access to User's profile (FirstName//LastName//Display Name//Image), email - Access to User's Email, uuid  - Access for a specific application/resource which matches this UUID"
         },
         "authGrantTypes": {
           "type": "string",
@@ -1745,159 +1801,16 @@
           "type": "string",
           "example": "https://*.hostname1.com/auth/* https://*.hostname2.com/auth/*",
           "description": "A space/comma separated list of absolute URIs of application endpoints that are allowed to receive the authorization code and access token. The redirect_uri sent by the application as part of the Authorization Code Grant Oauth 2.0 flow is verified against this list. A Wildcard can be substituted for any string to skip the check for a particular URL section"
+        },
+        "refreshTokenIdleTTL": {
+          "format": "int32",
+          "type": "integer",
+          "description": " How long in minutes new refresh tokens issued to this client can idle (only applicable if authGrantTypes includes \"refresh_token\"), its value should be less than refresh token ttl value",
+          "example": 525600
         }
       },
       "description": "OAuth 2.0 Client Settings"
     },
-    "OAuth2ClientSummaryList": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "items": {
-            "$ref": "#/definitions/OAuth2ClientSummary"
-          },
-          "type": "array",
-          "description": "The list of items in the current page"
-        },
-        "_links": {
-          "additionalProperties": {
-            "$ref": "#/definitions/Link"
-          },
-          "readOnly": true,
-          "type": "object"
-        }
-      },
-      "description": "The list of OAuth 2.0 clients"
-    },
-    "OpenIDConfiguration": {
-      "required": [
-        "authorization_endpoint",
-        "id_token_signing_alg_values_supported",
-        "issuer",
-        "jwks_uri",
-        "response_types_supported",
-        "subject_types_supported",
-        "token_endpoint"
-      ],
-      "type": "object",
-      "properties": {
-        "userinfo_endpoint": {
-          "type": "string",
-          "example": "https://acme.vmwareidentity.com/SAAS/jersey/manager/api/userinfo",
-          "description": "URL of the user info endpoint"
-        },
-        "jwks_uri": {
-          "type": "string",
-          "example": "https://acme.vmwareidentity.com/SAAS/API/1.0/REST/auth/token?attribute=publicKey&format=jwks",
-          "description": "URL of JSON Web Key Set document"
-        },
-        "scopes_supported": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "list of the OAuth 2.0 scope values that VMware Identity Manager supports"
-        },
-        "subject_types_supported": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "list of the Subject Identifier types that VMware Identity Manager supports"
-        },
-        "token_endpoint": {
-          "type": "string",
-          "example": "https://acme.vmwareidentity.com/SAAS/auth/oauthtoken",
-          "description": "URL of the OAuth 2.0 token endpoint"
-        },
-        "id_token_signing_alg_values_supported": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "list of the JWS signing algorithms supported for the ID Token to encode the Claims in a JWT"
-        },
-        "response_types_supported": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "list of the OAuth 2.0 response_type values that VMware Identity Manager supports"
-        },
-        "claims_supported": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "list of the claims VMware Identity Manager may be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list"
-        },
-        "authorization_endpoint": {
-          "type": "string",
-          "example": "https://acme.vmwareidentity.com/SAAS/auth/oauth2/authorize",
-          "description": "URL of the OAuth 2.0 authorization endpoint"
-        },
-        "issuer": {
-          "type": "string",
-          "example": "https://acme.vmwareidentity.com/SAAS/auth",
-          "description": "the identifier of the token's issuer. This is identical to the 'iss' Claim value in ID Tokens"
-        }
-      },
-      "description": "The OpenID configuration document as defined by the specification: http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata"
-    },
-    "AttributeDescriptor": {
-      "type": "object",
-      "properties": {
-        "subAttributes": {
-          "items": {
-            "$ref": "#/definitions/AttributeDescriptor"
-          },
-          "type": "array"
-        },
-        "description": {
-          "type": "string"
-        },
-        "canonicalValues": {
-          "items": {
-            "$ref": "#/definitions/EntryString"
-          },
-          "type": "array"
-        },
-        "dataType": {
-          "enum": [
-            "STRING",
-            "BOOLEAN",
-            "DATETIME",
-            "DECIMAL",
-            "INTEGER",
-            "BINARY",
-            "COMPLEX"
-          ],
-          "type": "string"
-        },
-        "required": {
-          "type": "boolean"
-        },
-        "caseExact": {
-          "type": "boolean"
-        },
-        "multiValuedChildName": {
-          "type": "string"
-        },
-        "readOnly": {
-          "type": "boolean"
-        },
-        "multiValued": {
-          "type": "boolean"
-        },
-        "schema": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-
     "EntryString": {
       "type": "object",
       "properties": {
@@ -1918,89 +1831,18 @@
         }
       }
     },
-        "SdkGroupResource": {
-            "type": "object", 
-            "properties": {
-                "displayName": {
-                    "type": "string"
-                }, 
-                "resourceDescriptor": {
-                    "$ref": "#/definitions/ResourceDescriptor"
-                }, 
-                "urn:scim:schemas:extension:workspace:1.0": {
-                    "description": "The group's attributes specific to the 'urn:scim:schemas:extension:workspace:1.0' schema.", 
-                    "$ref": "#/definitions/WorkspaceSchemaGroupAttributes"
-                }, 
-                "scimObject": {
-                    "$ref": "#/definitions/SCIMObject"
-                }, 
-                "meta": {
-                    "$ref": "#/definitions/Meta"
-                }, 
-                "externalId": {
-                    "type": "string"
-                }, 
-                "members": {
-                    "items": {
-                        "$ref": "#/definitions/EntryString"
-                    }, 
-                    "type": "array"
-                }, 
-                "id": {
-                    "type": "string"
-                },
-                "schemas": {
-                    "uniqueItems": true,
-                    "items": {
-                        "type": "string"
-                    },
-                    "type": "array",
-                    "description": "The set of schemas that are currently contributing attributes to this group"
-                }
-            }, 
-            "description": "The SCIM group resource object. It extends the standard SCIM group resource, see https://tools.ietf.org/html/rfc7643"
-        }, 
-    "Resources": {
+    "SdkGroupResource": {
       "type": "object",
       "properties": {
-        "itemsPerPage": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "startIndex": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "totalResults": {
-          "type": "integer",
-          "format": "int64"
-        }
-      }
-    },
-    "ResourceDescriptor": {
-      "type": "object",
-      "properties": {
-        "endpoint": {
+        "displayName": {
           "type": "string"
         },
         "resourceDescriptor": {
           "$ref": "#/definitions/ResourceDescriptor"
         },
-        "name": {
-          "type": "string"
-        },
-        "attributeSchemas": {
-          "uniqueItems": true,
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "description": {
-          "type": "string"
-        },
-        "strictMode": {
-          "type": "boolean"
+        "urn:scim:schemas:extension:workspace:1.0": {
+          "description": "The group's attributes specific to the 'urn:scim:schemas:extension:workspace:1.0' schema.",
+          "$ref": "#/definitions/WorkspaceSchemaGroupAttributes"
         },
         "scimObject": {
           "$ref": "#/definitions/SCIMObject"
@@ -2011,16 +1853,128 @@
         "externalId": {
           "type": "string"
         },
-        "attributes": {
+        "members": {
           "items": {
-            "$ref": "#/definitions/AttributeDescriptor"
+            "$ref": "#/definitions/EntryString"
           },
           "type": "array"
         },
         "id": {
           "type": "string"
         },
-        "schema": {
+        "schemas": {
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "The set of schemas that are currently contributing attributes to this group"
+        }
+      },
+      "description": "The SCIM group resource object. It extends the standard SCIM group resource, see https://tools.ietf.org/html/rfc7643"
+    },
+    "WorkspaceSchemaGroupAttributes": {
+      "type": "object",
+      "properties": {
+        "distinguishedName": {
+          "type": "string",
+          "example": "CN=all-admin-users,CN=Users,DC=acme,DC=com",
+          "description": "The group distinguished name if available"
+        },
+        "internalGroupType": {
+          "type": "string",
+          "example": "EXTERNAL",
+          "description": "The internal group type. Available values are: 'EXTERNAL' (when the group comes from an external source), DYNAMIC (local group with custom rules), INTERNAL (local group with static rules), ALL_USERS (the default group containing all users)"
+        },
+        "domain": {
+          "type": "string",
+          "example": "acme.com",
+          "description": "The group domain: can be the domain coming from an external source as AD or a local domain like 'System Domain'"
+        },
+        "description": {
+          "type": "string",
+          "example": "The group for all admin users",
+          "description": "The group description if available"
+        },
+        "compositionRules": {
+          "type": "string",
+          "example": "{\n  \"addedUserIds\" : [ ],\n  \"excludedUserIds\" : [ ],\n  \"rule\" : {\n    \"type\" : \"internalGroup\",\n    \"groupId\" : \"53cc45f9-2e21-4fa4-ae81-32e6fb15bd91\"\n  }\n}",
+          "description": "The group composition rules version 1. Those rules are populated with relevant information when a dynamic group is created."
+        },
+        "userStoreUuid": {
+          "type": "string",
+          "example": "acme.com",
+          "description": "The group user store identifier (userStoreUuid) if available. This is deprecated and will be replaced soon by the directory identifier"
+        },
+        "parents": {
+          "items": {
+            "$ref": "#/definitions/EntryString"
+          },
+          "type": "array",
+          "description": "The list of group parents if available. The groups can be nested and VMware Identity Manager will return the full hierarchy"
+        },
+        "compositionRulesV2": {
+          "type": "boolean",
+          "example": false,
+          "description": "The group composition rules version 2. Those rules are populated with relevant information when a dynamic group is created.It adds support for user uuid and group uuid"
+        },
+        "email": {
+          "type": "string",
+          "example": "all-admin-users@acme.com",
+          "description": "The group email if available"
+        }
+      }
+    },
+    "EnterpriseSchemaUserAttributes": {
+      "type": "object",
+      "properties": {
+        "manager": {
+          "description": "The user's manager if available. A complex type that optionally allows service\n      providers to represent organizational hierarchy by referencing the\n      \"id\" attribute of another User",
+          "$ref": "#/definitions/Manager"
+        },
+        "employeeNumber": {
+          "type": "string",
+          "example": "100007",
+          "description": "The user employee number if available: a string identifier, typically numeric or alphanumeric, assigned\n      to a person, typically based on order of hire or association with\n      an organization."
+        }
+      }
+    },
+    "Resources": {
+      "type": "object",
+      "properties": {
+        "totalResults": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "startIndex": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "itemsPerPage": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "Name": {
+      "type": "object",
+      "properties": {
+        "honorificPrefix": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "formatted": {
+          "type": "string"
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "honorificSuffix": {
           "type": "string"
         }
       }
@@ -2028,17 +1982,17 @@
     "ResourcesOfGroupResource": {
       "type": "object",
       "properties": {
-        "itemsPerPage": {
+        "totalResults": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "startIndex": {
           "type": "integer",
           "format": "int64"
         },
-        "totalResults": {
+        "itemsPerPage": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "Resources": {
           "items": {
@@ -2073,11 +2027,11 @@
         "region": {
           "type": "string"
         },
-        "formatted": {
-          "type": "string"
-        },
         "primary": {
           "type": "boolean"
+        },
+        "formatted": {
+          "type": "string"
         },
         "streetAddress": {
           "type": "string"
@@ -2090,7 +2044,7 @@
         }
       }
     },
-   "UserSummary": {
+    "UserSummary": {
       "type": "object",
       "properties": {
         "displayName": {
@@ -2140,7 +2094,7 @@
         },
         "urn:scim:schemas:extension:workspace:1.0": {
           "description": "The role's attributes specific to the 'urn:scim:schemas:extension:workspace:1.0' schema.",
-          "$ref": "#/definitions/WorkspaceSchemaUserAttributes"
+          "$ref": "#/definitions/WorkspaceSchemaRoleAttributes"
         },
         "scimObject": {
           "$ref": "#/definitions/SCIMObject"
@@ -2173,26 +2127,51 @@
       },
       "description": "The SCIM Role resource object. Role resource is an extension to the \"roles\" attribute which is loosely defined in the SCIM Core Schema; see https://tools.ietf.org/html/rfc7643"
     },
-    "Name": {
+    "ResourceDescriptor": {
       "type": "object",
       "properties": {
-        "honorificPrefix": {
+        "schema": {
           "type": "string"
         },
-        "middleName": {
+        "endpoint": {
           "type": "string"
         },
-        "familyName": {
+        "description": {
           "type": "string"
         },
-        "formatted": {
+        "attributeSchemas": {
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "strictMode": {
+          "type": "boolean"
+        },
+        "name": {
           "type": "string"
         },
-        "givenName": {
+        "meta": {
+          "$ref": "#/definitions/Meta"
+        },
+        "externalId": {
           "type": "string"
         },
-        "honorificSuffix": {
+        "attributes": {
+          "items": {
+            "$ref": "#/definitions/AttributeDescriptor"
+          },
+          "type": "array"
+        },
+        "scimObject": {
+          "$ref": "#/definitions/SCIMObject"
+        },
+        "id": {
           "type": "string"
+        },
+        "resourceDescriptor": {
+          "$ref": "#/definitions/ResourceDescriptor"
         }
       }
     },
@@ -2210,10 +2189,10 @@
           "description": "The access token type. It provides the client with the information required to successfully utilize the access token to make a protected resource request. For example, the 'Bearer' token type is utilized by simply including the access token string in the request: Authorization: Bearer mF_9.B5f-4.1JqM"
         },
         "expires_in": {
-          "description": "The time (in seconds) this token expires. If the return value is positive, the access token is going to expire in that many seconds. If the return value is 0, the access token already expired.If the return value is -1, token state could not be determined, since the access token doesn't contain expiration value.",
+          "format": "int64",
           "type": "integer",
-          "example": 21599,
-          "format": "int64"
+          "description": "The time (in seconds) this token expires. If the return value is positive, the access token is going to expire in that many seconds. If the return value is 0, the access token already expired.If the return value is -1, token state could not be determined, since the access token doesn't contain expiration value.",
+          "example": 21599
         },
         "refresh_token": {
           "type": "string",
@@ -2374,20 +2353,95 @@
       },
       "description": "The SCIM user resource object. It extends the standard SCIM user resource, see https://tools.ietf.org/html/rfc7643"
     },
+    "OpenIDConfiguration": {
+      "required": [
+        "authorization_endpoint",
+        "id_token_signing_alg_values_supported",
+        "issuer",
+        "jwks_uri",
+        "response_types_supported",
+        "subject_types_supported",
+        "token_endpoint"
+      ],
+      "type": "object",
+      "properties": {
+        "userinfo_endpoint": {
+          "type": "string",
+          "example": "https://acme.vmwareidentity.com/SAAS/jersey/manager/api/userinfo",
+          "description": "URL of the user info endpoint"
+        },
+        "jwks_uri": {
+          "type": "string",
+          "example": "https://acme.vmwareidentity.com/SAAS/API/1.0/REST/auth/token?attribute=publicKey&format=jwks",
+          "description": "URL of JSON Web Key Set document"
+        },
+        "scopes_supported": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "list of the OAuth 2.0 scope values that VMware Identity Manager supports"
+        },
+        "subject_types_supported": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "list of the Subject Identifier types that VMware Identity Manager supports"
+        },
+        "token_endpoint": {
+          "type": "string",
+          "example": "https://acme.vmwareidentity.com/SAAS/auth/oauthtoken",
+          "description": "URL of the OAuth 2.0 token endpoint"
+        },
+        "id_token_signing_alg_values_supported": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "list of the JWS signing algorithms supported for the ID Token to encode the Claims in a JWT"
+        },
+        "response_types_supported": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "list of the OAuth 2.0 response_type values that VMware Identity Manager supports"
+        },
+        "claims_supported": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "list of the claims VMware Identity Manager may be able to supply values for. Note that for privacy or other reasons, this might not be an exhaustive list"
+        },
+        "authorization_endpoint": {
+          "type": "string",
+          "example": "https://acme.vmwareidentity.com/SAAS/auth/oauth2/authorize",
+          "description": "URL of the OAuth 2.0 authorization endpoint"
+        },
+        "issuer": {
+          "type": "string",
+          "example": "https://acme.vmwareidentity.com/SAAS/auth",
+          "description": "the identifier of the token's issuer. This is identical to the 'iss' Claim value in ID Tokens"
+        }
+      },
+      "description": "The OpenID configuration document as defined by the specification: http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata"
+    },
     "ResourcesOfRoleResource": {
       "type": "object",
       "properties": {
-        "itemsPerPage": {
+        "totalResults": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "startIndex": {
           "type": "integer",
           "format": "int64"
         },
-        "totalResults": {
+        "itemsPerPage": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "Resources": {
           "items": {
@@ -2421,17 +2475,17 @@
     "ResourcesOfUserResource": {
       "type": "object",
       "properties": {
-        "itemsPerPage": {
+        "totalResults": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
         },
         "startIndex": {
           "type": "integer",
           "format": "int64"
         },
-        "totalResults": {
+        "itemsPerPage": {
           "type": "integer",
-          "format": "int64"
+          "format": "int32"
         },
         "Resources": {
           "items": {
@@ -2439,6 +2493,16 @@
           },
           "type": "array",
           "description": "The list of users."
+        }
+      }
+    },
+    "WorkspaceSchemaRoleAttributes": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string",
+          "example": "read-only admin with limited access to file system",
+          "description": "The description for this role"
         }
       }
     },
@@ -2464,15 +2528,15 @@
           "type": "boolean",
           "description": "Is set to true if user is soft deleted. False or empty if user is not soft deleted"
         },
-        "userStatus": {
-          "type": "string",
-          "example": "1",
-          "description": "The user status, available values are: 1 for enabled, 2 for disabled and 3 for deleted user"
-        },
         "userPrincipalName": {
           "type": "string",
           "example": "user1@acme.com",
           "description": "The user principal name if available"
+        },
+        "userStatus": {
+          "type": "string",
+          "example": "1",
+          "description": "The user status, available values are: 1 for enabled, 2 for disabled and 3 for deleted user"
         },
         "userStoreUuid": {
           "type": "string",
@@ -2485,6 +2549,59 @@
         }
       }
     },
+    "AttributeDescriptor": {
+      "type": "object",
+      "properties": {
+        "subAttributes": {
+          "items": {
+            "$ref": "#/definitions/AttributeDescriptor"
+          },
+          "type": "array"
+        },
+        "description": {
+          "type": "string"
+        },
+        "canonicalValues": {
+          "items": {
+            "$ref": "#/definitions/EntryString"
+          },
+          "type": "array"
+        },
+        "dataType": {
+          "enum": [
+            "STRING",
+            "BOOLEAN",
+            "DATETIME",
+            "DECIMAL",
+            "INTEGER",
+            "BINARY",
+            "COMPLEX"
+          ],
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "caseExact": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "multiValuedChildName": {
+          "type": "string"
+        },
+        "schema": {
+          "type": "string"
+        },
+        "multiValued": {
+          "type": "boolean"
+        }
+      }
+    },
     "SearchRequest": {
       "type": "object",
       "properties": {
@@ -2492,10 +2609,10 @@
           "type": "string"
         },
         "count": {
-          "description": "The number of found resources to return starting from the given startIndex. This is used for pagination. Default is 20",
+          "format": "int32",
           "type": "integer",
-          "example": 50,
-          "format": "int32"
+          "description": "The number of found resources to return starting from the given startIndex. This is used for pagination. Default is 20",
+          "example": 50
         },
         "excludedAttributes": {
           "type": "string"
@@ -2506,10 +2623,10 @@
           "description": "The search filter. When specified, only resources matching the filter expression will be returned. The filter must comply with the SCIM specification. Only 'eq','co','sw','gt','ge','lt' and 'le' are currently supported as operators"
         },
         "startIndex": {
-          "description": "Offset of the first resource to return in the list of found resources. This is used for pagination. Default is 0",
+          "format": "int32",
           "type": "integer",
-          "example": 1,
-          "format": "int32"
+          "description": "Offset of the first resource to return in the list of found resources. This is used for pagination. Default is 0",
+          "example": 1
         },
         "sortOrder": {
           "type": "string",
@@ -2575,7 +2692,26 @@
         }
       }
     },
-
+    "OAuth2ClientSummaryList": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "items": {
+            "$ref": "#/definitions/OAuth2ClientSummary"
+          },
+          "type": "array",
+          "description": "The list of items in the current page"
+        },
+        "_links": {
+          "additionalProperties": {
+            "$ref": "#/definitions/Link"
+          },
+          "readOnly": true,
+          "type": "object"
+        }
+      },
+      "description": "The list of OAuth 2.0 clients"
+    },
     "OAuth2ClientActivationDetails": {
       "type": "object",
       "properties": {
@@ -2591,73 +2727,7 @@
         }
       },
       "description": "The response of the mobile device activation"
-    }, 
-    "WorkspaceSchemaGroupAttributes": {
-            "type": "object", 
-            "properties": {
-                "distinguishedName": {
-                    "type": "string", 
-                    "example": "CN=all-admin-users,CN=Users,DC=acme,DC=com", 
-                    "description": "The group distinguished name if available"
-                }, 
-                "internalGroupType": {
-                    "type": "string", 
-                    "example": "EXTERNAL", 
-                    "description": "The internal group type. Available values are: 'EXTERNAL' (when the group comes from an external source), DYNAMIC (local group with custom rules), INTERNAL (local group with static rules), ALL_USERS (the default group containing all users)"
-                }, 
-                "domain": {
-                    "type": "string", 
-                    "example": "acme.com", 
-                    "description": "The group domain: can be the domain coming from an external source as AD or a local domain like 'System Domain'"
-                }, 
-                "description": {
-                    "type": "string", 
-                    "example": "The group for all admin users", 
-                    "description": "The group description if available"
-                }, 
-                "compositionRules": {
-                    "type": "string", 
-                    "example": "{\n  \"addedUserIds\" : [ ],\n  \"excludedUserIds\" : [ ],\n  \"rule\" : {\n    \"type\" : \"internalGroup\",\n    \"groupId\" : \"53cc45f9-2e21-4fa4-ae81-32e6fb15bd91\"\n  }\n}", 
-                    "description": "The group composition rules version 1. Those rules are populated with relevant information when a dynamic group is created."
-                }, 
-                "userStoreUuid": {
-                    "type": "string", 
-                    "example": "acme.com", 
-                    "description": "The group user store identifier (userStoreUuid) if available. This is deprecated and will be replaced soon by the directory identifier"
-                },
-              "parents": {
-                "items": {
-                  "$ref": "#/definitions/EntryString"
-                },
-                "type": "array",
-                "description": "The list of group parents if available. The groups can be nested and VMware Identity Manager will return the full hierarchy"
-              },
-              "compositionRulesV2": {
-                    "type": "boolean", 
-                    "example": false, 
-                    "description": "The group composition rules version 2. Those rules are populated with relevant information when a dynamic group is created.It adds support for user uuid and group uuid"
-                }, 
-                "email": {
-                    "type": "string", 
-                    "example": "all-admin-users@acme.com", 
-                    "description": "The group email if available"
-                }
-            }
-        },
-    "EnterpriseSchemaUserAttributes": {
-      "type": "object",
-      "properties": {
-        "manager": {
-          "description": "The user's manager if available. A complex type that optionally allows service\n      providers to represent organizational hierarchy by referencing the\n      \"id\" attribute of another User",
-          "$ref": "#/definitions/Manager"
-        },
-        "employeeNumber": {
-          "type": "string",
-          "example": "100007",
-          "description": "The user employee number if available: a string identifier, typically numeric or alphanumeric, assigned\n      to a person, typically based on order of hire or association with\n      an organization."
-        }
-      }
     }
-  }, 
+  },
   "swagger": "2.0"
 }
