@@ -1,0 +1,697 @@
+
+<!doctype html>
+<html>
+  <head>
+	<link href="images/vmware_favicon.png" rel="icon" type="image/png" />
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#identity-manager-api-documentation" class="toc-h1 toc-link" data-title="Identity Manager API documentation">Identity Manager API documentation</a>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#register-api-access" class="toc-h2 toc-link" data-title="Register API access">Register API access</a>
+                  </li>
+                  <li>
+                    <a href="#obtain-access-token" class="toc-h2 toc-link" data-title="Obtain Access Token">Obtain Access Token</a>
+                  </li>
+                  <li>
+                    <a href="#refresh-access-token" class="toc-h2 toc-link" data-title="Refresh Access Token">Refresh Access Token</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#api-endpoints" class="toc-h1 toc-link" data-title="API endpoints">API endpoints</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#audit-api" class="toc-h2 toc-link" data-title="Audit API">Audit API</a>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+        <ul class="toc-footer">
+            <li><a href='https://docs.vmware.com/en/VMware-Identity-Manager/index.html'>Identity Manager Documentation</a></li>
+            <li><a href='https://vmware.github.io/idm/'>Identity Manager GitHub page</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='identity-manager-api-documentation'>Identity Manager API documentation</h1>
+<p>Welcome to the VMware Identity Manager API documentation. We will be providing documentation to the most used Identity Manager API endpoints, along with examples, and detailed description. </p>
+
+<p>We have language bindings in Shell and Python. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+
+<p>Feel free to reference <a href="https://docs.vmware.com/en/VMware-Identity-Manager/index.html">Identity Manager Documentation portal</a> for more information about Identity Manager SaaS and on-premises offerings. </p>
+<h1 id='authentication'>Authentication</h1>
+<p>In order to start querying Identity Manager APIs, you need to obtain access token. To do that, you need to perform the following steps:</p>
+
+<ol>
+<li>Regest API access to obtain Client Secret</li>
+<li>Obtain Access Token</li>
+<li>Refresh Access Token when it expires</li>
+</ol>
+
+<p>Let&#39;s look into these steps in detail. </p>
+<h2 id='register-api-access'>Register API access</h2>
+<p>Before accessing the API you need to have a valid API access token. In order to obtain the access token, you first need to create a service client in the Identity Manager. </p>
+
+<ul>
+<li>In the VMware Identity Manager admin UI, go to <code>Catalog -&gt; Settings</code>.</li>
+<li>Click on the <code>Remote App Access</code> menu on the left-hand side and click <code>Create Client</code>.</li>
+<li>Select <code>Service Client Token</code> as the Access Type</li>
+<li>Enter a <code>client ID</code></li>
+<li>Click Add</li>
+</ul>
+
+<p><img src="images/token.png" alt="Token" /></p>
+
+<p>As a result you will get the <code>Client Secret</code> that you can use to obtain the access token.</p>
+
+<p>Example of client secret - <code>fFjs8tGiloQD5ze4pL42EV6s0mufGrOG</code></p>
+<h2 id='obtain-access-token'>Obtain Access Token</h2>
+<p>Once you have Client Secret, you can generate access token. Access token will then let you query various IDM API endpoints. </p>
+<h3 id='http-request'>HTTP request</h3>
+<blockquote>
+<p>To request access token:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl –X POST https://npoturnak.vidmpreview.com/SAAS/auth/oauthtoken <span class="se">\</span>
+-H <span class="s1">'authorization: Basic Y3VybDpmRmpzOHRHaWxvUUQ1emU0cEw0MkVWNnMwbXVmR3JPRw=='</span> <span class="se">\</span>
+-H <span class="s1">'content-type:application/x-www-form-urlencoded'</span> <span class="se">\</span>
+-d <span class="s1">'grant_type=client_credentials'</span>
+</code></pre>
+<blockquote>
+<p>IDM will return the following as a response:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span>
+    <span class="s2">"access_token"</span>:<span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4ZWViMDJjMi1jZGU2LTRiYTEtYjc4Ny1jODc4NWFlMjQ0YzciLCJwcm4iOiJjdXJsQE5QT1RVUk5BSyIsImRvbWFpbiI6IlN5c3RlbSBEb21haW4iLCJ1c2VyX2lkIjoiNjcwMDcyMCIsImF1dGhfdGltZSI6MTU2MTM2MjE0OCwiaXNzIjoiaHR0cHM6Ly9ucG90dXJuYWsudmlkbXByZXZpZXcuY29tL1NBQVMvYXV0aCIsImF1ZCI6Imh0dHBzOi8vbnBvdHVybmFrLnZpZG1wcmV2aWV3LmNvbS9TQUFTL2F1dGgvb2F1dGh0b2tlbiIsImN0eCI6Ilt7XCJtdGRcIjpcInVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphYzpjbGFzc2VzOlBhc3N3b3JkUHJvdGVjdGVkVHJhbnNwb3J0XCIsXCJpYXRcIjoxNTYxMzYyMTQ4LFwiaWRcIjo0MjE2Mjc5fV0iLCJzY3AiOiJhZG1pbiIsImlkcCI6IjAiLCJlbWwiOiJPQXV0aENsaWVudF9jdXJsQG5vcmVwbHkuY29tIiwiY2lkIjoiY3VybCIsImRpZCI6IiIsIndpZCI6IiIsInJ1bGVzIjp7ImV4cGlyeSI6MTU2MTM3Mjk0OCwicnVsZXMiOlt7InJlc291cmNlcyI6WyIqIl0sImFjdGlvbnMiOlsiKiJdLCJjb25kaXRpb25zIjpudWxsLCJhZHZpY2UiOm51bGx9XSwibGluayI6bnVsbH0sImV4cCI6MTU2MTM3Mjk0OCwiaWF0IjoxNTYxMzYyMTQ4LCJzdWIiOiJiNTBlNTRlOS1kYzIwLTRjNTQtODNmMy0wOTE0YmM0ZDlmODYiLCJwcm5fdHlwZSI6IlNFUlZJQ0UifQ.tQ4rMgj678oqmRv4XoVCE_RTeDglDq79A66fw4mXgW2GsNhQqm8QHBDDw9esiD_tIYtQZiGMPdS_EEvOhtCWpuNKLacyzNPRhTwCrdzIlQg0oFnemUn_88A1EU5xDiQCKOniTTdRqSo4eAN8hU-UrD8KUg9xkyw_NUuU_w_XlOU"</span>,
+    <span class="s2">"token_type"</span>:<span class="s2">"Bearer"</span>,
+    <span class="s2">"expires_in"</span>:10799,
+    <span class="s2">"refresh_token"</span>:<span class="s2">"p7kR5e3xOK0OESIMlBYJxqvQoSQnxxxp"</span>,
+    <span class="s2">"scope"</span>:<span class="s2">"admin"</span>
+<span class="o">}</span>
+</code></pre>
+<p><code>POST https://[tenant location]/SAAS/auth/oauthtoken</code></p>
+<h3 id='input-parameters'>Input parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>tenant location</strong></td>
+<td>Yes (URL)</td>
+<td>Hostname of your tenant</td>
+</tr>
+<tr>
+<td><strong>grant_type=client_credentials</strong></td>
+<td>Yes (Body)</td>
+<td>Required to receive the access token</td>
+</tr>
+<tr>
+<td><strong>application/x-www-form-urlencoded</strong></td>
+<td>Yes (Header)</td>
+<td>Format of the encoding</td>
+</tr>
+<tr>
+<td><strong>Authorization: Basic</strong></td>
+<td>Yes (Header)</td>
+<td>You need to pass the Base64 encoded string of the client_id:Client_secret</td>
+</tr>
+</tbody></table>
+
+<p>For <strong>Authorization header</strong>, you need to Base64 encode the value of your <code>client_id:client_secret</code>. As an example, let&#39;s say:</p>
+
+<ul>
+<li>You have <code>curl:fFjs8tGiloQD5ze4pL42EV6s0mufGrOG</code></li>
+<li>Then Base64 encoded value is <code>Y3VybDpmRmpzOHRHaWxvUUQ1emU0cEw0MkVWNnMwbXVmR3JPRw==</code></li>
+</ul>
+
+<p>To generate Base64 encoded values, you can use the following online resource <a href="https://www.base64decode.org/">Based 64 Encoding Tool</a>.</p>
+
+<aside class="notice">
+The access token will have a time to live value of <b>3 hours</b> by default. Once the token expires, you will need to get new access token. 
+</aside>
+<h2 id='refresh-access-token'>Refresh Access Token</h2>
+<p>The Access Token has limited lifetime. If your Token expires, you should request a new Access Token using the Refresh Token.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<blockquote>
+<p>To refresh Access Token:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl –X POST https://npoturnak.vidmpreview.com/SAAS/auth/oauthtoken <span class="se">\</span>
+-H <span class="s1">'authorization: Basic Y3VybDpmRmpzOHRHaWxvUUQ1emU0cEw0MkVWNnMwbXVmR3JPRw=='</span> <span class="se">\</span>
+-H <span class="s1">'content-type:application/x-www-form-urlencoded'</span> <span class="se">\</span>
+-d <span class="s1">'grant_type=client_credentials'</span> <span class="se">\</span>
+-d <span class="s1">'refresh_token=00mZhyz89PVOv3dJQtXBCTWB9CYqsCMN'</span>
+</code></pre>
+<blockquote>
+<p>IDM will return the following in response:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="o">{</span><span class="s2">"access_token"</span>:<span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJhOTY4ZDI5YS1jNTk3LTQ1MDItOWUxYy05MWQzZGZlNDkxNTYiLCJwcm4iOiJjdXJsQE5QT1RVUk5BSyIsImRvbWFpbiI6IlN5c3RlbSBEb21haW4iLCJ1c2VyX2lkIjoiNjcwMDcyMCIsImF1dGhfdGltZSI6MTU2MTQzODM0NywiaXNzIjoiaHR0cHM6Ly9ucG90dXJuYWsudmlkbXByZXZpZXcuY29tL1NBQVMvYXV0aCIsImF1ZCI6Imh0dHBzOi8vbnBvdHVybmFrLnZpZG1wcmV2aWV3LmNvbS9TQUFTL2F1dGgvb2F1dGh0b2tlbiIsImN0eCI6Ilt7XCJtdGRcIjpcInVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphYzpjbGFzc2VzOlBhc3N3b3JkUHJvdGVjdGVkVHJhbnNwb3J0XCIsXCJpYXRcIjoxNTYxNDM4MzQ3LFwiaWRcIjo0MjE2Mjc5fV0iLCJzY3AiOiJhZG1pbiIsImlkcCI6IjAiLCJlbWwiOiJPQXV0aENsaWVudF9jdXJsQG5vcmVwbHkuY29tIiwiY2lkIjoiY3VybCIsImRpZCI6IiIsIndpZCI6IiIsInJ1bGVzIjp7ImV4cGlyeSI6MTU2MTQ0OTE0NywicnVsZXMiOlt7InJlc291cmNlcyI6WyIqIl0sImFjdGlvbnMiOlsiKiJdLCJjb25kaXRpb25zIjpudWxsLCJhZHZpY2UiOm51bGx9XSwibGluayI6bnVsbH0sImV4cCI6MTU2MTQ0OTE0NywiaWF0IjoxNTYxNDM4MzQ3LCJzdWIiOiJiNTBlNTRlOS1kYzIwLTRjNTQtODNmMy0wOTE0YmM0ZDlmODYiLCJwcm5fdHlwZSI6IlNFUlZJQ0UifQ.iX9Dv_-bAE11_C33IQED81uyKBHxEAwVJt1BrAc4Ja8AQyOHtRnmJ1jlsw155qOZHN8erjMlxoZUtpxB1MMu_fKFiKClcP03Zyl5haIveBS_KXHXNIs69YQOFtp3nQuJMeh95-axi0anpxWgkSE9ElpETOoiC-Fv5iqqsteW8dY"</span>,
+<span class="s2">"token_type"</span>:<span class="s2">"Bearer"</span>,
+<span class="s2">"expires_in"</span>:10799,
+<span class="s2">"refresh_token"</span>:<span class="s2">"hSBL4QjShOrAxp2NkexXjGQISagzY0qh"</span>,
+<span class="s2">"scope"</span>:<span class="s2">"admin"</span><span class="o">}</span>
+</code></pre>
+<p><code>POST https://[tenant location]/SAAS/auth/oauthtoken</code></p>
+<h3 id='input-parameters-2'>Input parameters</h3>
+<p>The following parameters need to be specified in the of the request, using the <code>application/x-www-form-urlencoded</code> format:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>grant_type=refresh_token</strong></td>
+<td>Yes (Body)</td>
+<td>Required parameter</td>
+</tr>
+<tr>
+<td><strong>refresh_token</strong></td>
+<td>Yes (Body)</td>
+<td>The Refresh Token sent back by Identity Manager during the first Access Token Request.</td>
+</tr>
+<tr>
+<td><strong>scope</strong></td>
+<td>No (Body)</td>
+<td>The list of scopes separated by space and URL encoded.</td>
+</tr>
+<tr>
+<td><strong>Authorization: Basic [base64Encode(clientId + &quot;:&quot; + secret)]</strong></td>
+<td>Yes (Header)</td>
+<td>To create your Basic Credentials, create a string with your app’s Client ID and Client Secret, separated by a colon ( : )</td>
+</tr>
+<tr>
+<td><strong>Content_Type</strong></td>
+<td>Yes (Header)</td>
+<td>Content-Type: application/x-www-form-urlencoded</td>
+</tr>
+</tbody></table>
+
+<p>For <strong>Authorization header</strong>, you need to Base64 encode the value of your <code>client_id:client_secret</code>. As an example, let&#39;s say:</p>
+
+<ul>
+<li>You have <code>curl:fFjs8tGiloQD5ze4pL42EV6s0mufGrOG</code></li>
+<li>Then Base64 encoded value is <code>Y3VybDpmRmpzOHRHaWxvUUQ1emU0cEw0MkVWNnMwbXVmR3JPRw==</code></li>
+</ul>
+<h1 id='api-endpoints'>API endpoints</h1><h2 id='audit-api'>Audit API</h2>
+<p>This endpoint allows to retrieve audit information from Identity Manager. This information is typically used to generate information about login activity with Identity Manager, along with retrieving various audit information about SaaS IDM instance. </p>
+<h3 id='http-request-3'>HTTP Request</h3>
+<blockquote>
+<p>To query Audit API:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c">#In this example I am retrieving all audit events of type LOGIN</span>
+<span class="c">#and I am restricting the time with toMillis parameter</span>
+
+curl -H <span class="s1">'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJhZTA1Njk1Ni1iNGZjLTQ4ZDMtODcxMy01Yzg0OGRiYWZiNmMiLCJwcm4iOiJjdXJsQE5QT1RVUk5BSyIsImRvbWFpbiI6IlN5c3RlbSBEb21haW4iLCJ1c2VyX2lkIjoiNjcwMDcyMCIsImF1dGhfdGltZSI6MTU2MTM5NDU2OCwiaXNzIjoiaHR0cHM6Ly9ucG90dXJuYWsudmlkbXByZXZpZXcuY29tL1NBQVMvYXV0aCIsImF1ZCI6Imh0dHBzOi8vbnBvdHVybmFrLnZpZG1wcmV2aWV3LmNvbS9TQUFTL2F1dGgvb2F1dGh0b2tlbiIsImN0eCI6Ilt7XCJtdGRcIjpcInVybjpvYXNpczpuYW1lczp0YzpTQU1MOjIuMDphYzpjbGFzc2VzOlBhc3N3b3JkUHJvdGVjdGVkVHJhbnNwb3J0XCIsXCJpYXRcIjoxNTYxMzk0NTY4LFwiaWRcIjo0MjE2Mjc5fV0iLCJzY3AiOiJhZG1pbiIsImlkcCI6IjAiLCJlbWwiOiJPQXV0aENsaWVudF9jdXJsQG5vcmVwbHkuY29tIiwiY2lkIjoiY3VybCIsImRpZCI6IiIsIndpZCI6IiIsInJ1bGVzIjp7ImV4cGlyeSI6MTU2MTQwNTM2OCwicnVsZXMiOlt7InJlc291cmNlcyI6WyIqIl0sImFjdGlvbnMiOlsiKiJdLCJjb25kaXRpb25zIjpudWxsLCJhZHZpY2UiOm51bGx9XSwibGluayI6bnVsbH0sImV4cCI6MTU2MTQwNTM2OCwiaWF0IjoxNTYxMzk0NTY4LCJzdWIiOiJiNTBlNTRlOS1kYzIwLTRjNTQtODNmMy0wOTE0YmM0ZDlmODYiLCJwcm5fdHlwZSI6IlNFUlZJQ0UifQ.jGrv59h8QVrfrfUyQLdw7M_xgTYYvRkiI3OnjcI9hirLpHBeSAPsLDGi8MbKsSRi_oGIaBL6HrN7f2PyFOr1a9XQ-b4-BfA5-qgFz1NPz0FLUrRk79zqiD0WtEiMKPV1ZfLw4Nk5B4Bv4u4HMeuCzSd5LfFBTl9EIWqWno1o0Zo'</span> <span class="se">\</span>
+https://npoturnak.vidmpreview.com/analytics/reports/audit?/analytics/reports/audit?fromMillis<span class="o">=</span>1559499975000<span class="se">\&amp;</span><span class="nv">objectType</span><span class="o">=</span>LOGIN| json_pp
+</code></pre>
+<blockquote>
+<p>IDM will return the following as a response:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c">#In this example we see 2 events of LOGIN type</span>
+<span class="c"># for the username admin</span>
+<span class="c"># the auth method used is password against local directory</span>
+
+<span class="o">{</span>
+   <span class="s2">"header"</span> : <span class="o">[</span>
+      <span class="s2">"reports.dateAndTime"</span>,
+      <span class="s2">"reports.userDomain"</span>,
+      <span class="s2">"reports.Event"</span>,
+      <span class="s2">"reports.object"</span>,
+      <span class="s2">""</span>
+   <span class="o">]</span>,
+   <span class="s2">"data"</span> : <span class="o">[</span>
+      <span class="o">[</span>
+         <span class="s2">"1561399981109"</span>,
+         <span class="s2">"admin (System Domain)"</span>,
+         <span class="s2">"LOGIN (Password (Local Directory))"</span>,
+         null,
+         <span class="s2">"{</span><span class="se">\"</span><span class="s2">baseType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Action</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">uuid</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">fe0944c3-5e69-425c-92ee-9db0b099d1aa</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">timestamp</span><span class="se">\"</span><span class="s2">:1561399981109,</span><span class="se">\"</span><span class="s2">organizationId</span><span class="se">\"</span><span class="s2">:252221,</span><span class="se">\"</span><span class="s2">tenantId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">NPOTURNAK</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorId</span><span class="se">\"</span><span class="s2">:5723506,</span><span class="se">\"</span><span class="s2">actorUserName</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">admin</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorDomain</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">System Domain</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorUuid</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">35ac32d1-1565-4ab4-ad1a-191120540590</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">clientId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">deviceId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">workspaceId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">sourceIp</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">208.91.2.2</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">objectType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">LOGIN</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">objectId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">objectName</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">values</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">deviceType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">browser</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">success</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">true</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">authMethods</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Password (Local Directory)</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorExternalId</span><span class="se">\"</span><span class="s2">:null}}"</span>
+      <span class="o">]</span>,
+      <span class="o">[</span>
+         <span class="s2">"1561357380574"</span>,
+         <span class="s2">"admin (System Domain)"</span>,
+         <span class="s2">"LOGIN (Password (Local Directory))"</span>,
+         null,
+         <span class="s2">"{</span><span class="se">\"</span><span class="s2">baseType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Action</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">uuid</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">314ee065-744f-4188-b595-0aa961ff00b7</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">timestamp</span><span class="se">\"</span><span class="s2">:1561357380574,</span><span class="se">\"</span><span class="s2">organizationId</span><span class="se">\"</span><span class="s2">:252221,</span><span class="se">\"</span><span class="s2">tenantId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">NPOTURNAK</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorId</span><span class="se">\"</span><span class="s2">:5723506,</span><span class="se">\"</span><span class="s2">actorUserName</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">admin</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorDomain</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">System Domain</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorUuid</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">35ac32d1-1565-4ab4-ad1a-191120540590</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">clientId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">deviceId</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">workspaceId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">sourceIp</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">66.170.99.1</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">objectType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">LOGIN</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">objectId</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">objectName</span><span class="se">\"</span><span class="s2">:null,</span><span class="se">\"</span><span class="s2">values</span><span class="se">\"</span><span class="s2">:{</span><span class="se">\"</span><span class="s2">deviceType</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">browser</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">success</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">true</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">authMethods</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Password (Local Directory)</span><span class="se">\"</span><span class="s2">,</span><span class="se">\"</span><span class="s2">actorExternalId</span><span class="se">\"</span><span class="s2">:null}}"</span>
+      <span class="o">]</span>
+   <span class="o">]</span>,
+   <span class="s2">"_links"</span> : <span class="o">{</span>
+      <span class="s2">"self"</span> : <span class="o">{</span>
+         <span class="s2">"href"</span> : <span class="s2">"/analytics/reports/audit?fromMillis=1561142523041&amp;toMillis=1561401723041&amp;objectType=LOGIN&amp;pageSize=5000&amp;startIndex=0"</span>
+      <span class="o">}</span>
+   <span class="o">}</span>,
+   <span class="s2">"headerArg"</span> : <span class="o">[</span>
+      <span class="s2">""</span>,
+      <span class="s2">""</span>,
+      <span class="s2">""</span>,
+      <span class="s2">""</span>,
+      <span class="s2">""</span>
+   <span class="o">]</span>
+<span class="o">}</span>
+</code></pre>
+<p><code>GET https://[tenant location]/analytics/reports/audit/</code></p>
+<h3 id='input-parameters-3'>Input parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>tenant location</strong></td>
+<td>Yes (URL)</td>
+<td>Hostname of your tenant</td>
+</tr>
+<tr>
+<td><strong>fromMillis</strong></td>
+<td>No (URL)</td>
+<td>Filter events no older than this time, milliseconds since epoch, defaults to 3 days ago (now-96 hours)</td>
+</tr>
+<tr>
+<td><strong>toMillis</strong></td>
+<td>No (URL)</td>
+<td>filter events no newer than this time, milliseconds since epoch, defaults to now.</td>
+</tr>
+<tr>
+<td><strong>pageSize</strong></td>
+<td>No (URL)</td>
+<td>Max page size of the results, max allowed value is 5000, which is default</td>
+</tr>
+<tr>
+<td><strong>startIndex</strong></td>
+<td>No (URL)</td>
+<td>Use offset to page through the results</td>
+</tr>
+<tr>
+<td><strong>objectType</strong></td>
+<td>No (URL)</td>
+<td>Filter specific types of audit events or affected objects. For details, please see the tabel below</td>
+</tr>
+<tr>
+<td><strong>action</strong></td>
+<td>No (URL)</td>
+<td>Filter event types even further by specifying what action was taken when the event was generated</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+To convert time to epoch milliseconds you can use various wed tools. For example,  <a href=
+"https://www.epochconverter.com/"> https://www.epochconverter.com/</a>
+</aside>
+<h3 id='types-and-actions-for-audit-events'>Types and actions for audit events</h3>
+<p>There are various types of audit events that can be retrieved. The table below provides a list of most common event types. </p>
+
+<table><thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Action</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>LOGIN</strong></td>
+<td>Allows to see information about who logged in when and what auth method was used as well as details about IP address, user agent string, etc. <code>failureMessage</code> - the reason if the login attempt failed. <code>authMethods</code> - the authentication methods used.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>Group</strong></td>
+<td>Allows to see information about group activity in IDM</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>LAUNCH</strong></td>
+<td>Allows to see information about who launched what applications and when. Values: <code>success</code> - if the launch attempt was successful. <code>failureMessage</code> - the reason if the launch attempt failed. <code>resourceType</code> - the type of application launched.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>LOGIN_ERROR</strong></td>
+<td>Allows to see information about any launch failures. Use this action type only if the login did not fail because of wrong user input. It could be a failure because of configuration or system errors.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>DyrectorySyncProfile</strong></td>
+<td>Allows to see information about directory sync</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>AppEntitlement</strong></td>
+<td>Allows to see information about what applications are entitled to what groups and users</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>LAUNCH_ERROR</strong></td>
+<td>User launched an application with an invalid request or if we could not get resource name, UUID or type. Values: <code>failureMessage</code> - the reason if the launch attempt failed.</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<aside class="warning">
+Types are case sensitive!
+</aside>
+
+<p>For the actions, there are several types of action filters available:</p>
+
+<table><thead>
+<tr>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>Create</strong></td>
+<td>Object was created</td>
+</tr>
+<tr>
+<td><strong>Update</strong></td>
+<td>Object was updated</td>
+</tr>
+<tr>
+<td><strong>Delete</strong></td>
+<td>Object was deleted</td>
+</tr>
+<tr>
+<td><strong>Link</strong></td>
+<td>object was linked</td>
+</tr>
+<tr>
+<td><strong>Unlink</strong></td>
+<td>Object was unlinked</td>
+</tr>
+</tbody></table>
+<h3 id='output-parameters'>Output parameters</h3>
+<p>Depending on the <code>objectType</code> retrieved and the <code>action</code> filter specified, API can return various parameters. The table below provides the information about the most used parameters. </p>
+
+<table><thead>
+<tr>
+<th>Output parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><strong>actorId</strong></td>
+<td>The userID of the user who performed the event. In the case of a system event, this the value of this attribute will be null. ActorIds are presented in integer format in the case of a user. In the case of a system service, the return will be null.</td>
+</tr>
+<tr>
+<td><strong>actorUserName</strong></td>
+<td>The username of the user who performed the event. In the case of a system event, the value of this attribute will be null. Expected values include both usernames of user accounts in vIDM, as well as system services. Ex: <code>jdoe</code>.</td>
+</tr>
+<tr>
+<td><strong>actorDomain</strong></td>
+<td>The domain of the user who performed the event. In the case of a system event, the value of this attribute will be null. In the case of a user generated event, the domain of the user will be returned. Ex: vmware.com</td>
+</tr>
+<tr>
+<td><strong>actorUUid</strong></td>
+<td>The UUID of the user who performed the event. Return values will always be in standard UUID format. Ex:<code>8c2a83a2-a546-4571-b16c-ed11a8f51725</code></td>
+</tr>
+<tr>
+<td><strong>objectType</strong></td>
+<td>ObjectType describes the category of event that was recorded. There are many object types that span both end user activities such as authentication or application launch, and admin activities like entitlements. Please, see the table above the describes various object types.</td>
+</tr>
+<tr>
+<td><strong>objectId</strong></td>
+<td>ObjectID represents the unique internal identifier of the object being modified or interacted with. Depending on the object name and type, different ID formats may be returned.</td>
+</tr>
+<tr>
+<td><strong>objectName</strong></td>
+<td>ObjectName describes the object being modified or interacted with. This can take the form of a specific user, application, configuration, or tenant.</td>
+</tr>
+<tr>
+<td><strong>objectAction</strong></td>
+<td>ObjectAction defines which action was taken against the object in an Audit baseType event. As an example, when updating a user or user entitlements, you would find the objectAction &quot;UPDATE&quot;. However, in the case of baseType=Action, this attribute will not appear as the action is defined in objectType.</td>
+</tr>
+<tr>
+<td><strong>baseType</strong></td>
+<td>BaseType represents the type of record being returned. There are two possibilities, <code>Audit</code> and <code>Action</code>. <code>Audit</code> events indicate changes to the database as a result of the event. <code>Action</code> events are not directly related to database changes.</td>
+</tr>
+<tr>
+<td><strong>timeStamp</strong></td>
+<td>Time stamp for event in milliseconds UTC since Jan 1, 1970.</td>
+</tr>
+<tr>
+<td><strong>uuid</strong></td>
+<td>Uuid for the specific audit record. This identifier is unique for each record, including multiple instances of the same type of event. Output value is standard UUID format. This value is not particularly useful except when searching for a specific, already known event record. Example UUID: <code>07b6c947-f025-422f-be2c-3c87b0f3c017</code></td>
+</tr>
+<tr>
+<td><strong>organizationId</strong></td>
+<td>Unique numerical identifier for the VMware Identity Manager tenant.</td>
+</tr>
+<tr>
+<td><strong>tenantId</strong></td>
+<td>This attribute is the customers tenant identifier. The value should match the prefix of the environment URL in the following format <code>{tenantId}.vmwareidentity.com</code>.</td>
+</tr>
+<tr>
+<td><strong>sourceIP</strong></td>
+<td>This attribute outputs the sourceIP for the machine which issued the request. Values can take on either the IPv4 format. Example IPv4: <code>168.175.34.12</code></td>
+</tr>
+<tr>
+<td><strong>authMethods</strong></td>
+<td>This attribute can return one or more authentication methods used for the request. The authentication methods returned correspond directly with the auth adapter labels in the VMware Identity Manager admin console. Multiple auth methods will be listed in comma delimited format. Example: &quot;method1&quot;, &quot;method2&quot;.</td>
+</tr>
+</tbody></table>
+
+<p>The available Auth Methods that can be returned as part of Audit API response are listed below:</p>
+
+<ul>
+<li>Password (AirWatch Connector)</li>
+<li>Device Compliance (with AirWatch)</li>
+<li>VMware Verify</li>
+<li>Mobile SSO (for iOS)</li>
+<li>Password (Local Directory)</li>
+<li>Mobile SSO (for Android)</li>
+<li>Certificate (Cloud Deployment)</li>
+<li>vIDM Password - Displayed when user authenticates with an external directory using the vIDM connector</li>
+</ul>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
