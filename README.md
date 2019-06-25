@@ -30,3 +30,4 @@ Sample applications are provided - as is - to demonstrate how to integrate your 
 
 ## Resources
 * [Reference API File](https://github.com/vmware/idm/blob/master/apidocs/swagger.json)
+* [Identity Manager API Documentation](https://vmware.github.io/idm/api-docs)
